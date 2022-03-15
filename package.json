@@ -15,7 +15,8 @@
     "lint:tsc": "tsc --noEmit -p ./tsconfig.json",
     "fix": "run-s fix:*",
     "fix:prettier": "npm run lint:prettier -- --write",
-    "fix:next": "npm run lint:next -- --fix"
+    "fix:next": "npm run lint:next -- --fix",
+    "scripts:esbuild": "node --require esbuild-register --"
   },
   "dependencies": {
     "@emotion/cache": "^11.7.1",
@@ -29,7 +30,8 @@
     "next": "12.1.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "sanitize.css": "^13.0.0"
+    "sanitize.css": "^13.0.0",
+    "seedrandom": "^3.0.5"
   },
   "devDependencies": {
     "@swc/core": "^1.2.155",
@@ -37,6 +39,8 @@
     "@types/jest": "^27.4.1",
     "@types/node": "^17.0.21",
     "@types/react": "^17.0.40",
+    "@types/seedrandom": "^3.0.2",
+    "esbuild-register": "^3.3.2",
     "eslint": "^8.11.0",
     "eslint-config-next": "12.1.0",
     "eslint-config-prettier": "^8.5.0",

@@ -20,12 +20,16 @@ const ranks = [
 export type Rank = typeof ranks[number];
 
 const rank = Object.fromEntries(ranks.map((r, i) => [r, i]));
+const reverseRank = Object.fromEntries(ranks.map((r, i) => [`${i}`, r]));
 
-const suits = ["C", "D", "H", "S"];
+const suits = ["C", "D", "H", "S"] as const;
 
 export type Suit = typeof suits[number];
 
 const suit = Object.fromEntries(suits.map((r, i) => [r, i]));
+const reverseSuit = Object.fromEntries(suits.map((r, i) => [`${i}`, r]));
+
+export const numberOfCards = ranks.length * suits.length;
 
 export type Card = {
   rank: Rank;
@@ -34,6 +38,17 @@ export type Card = {
 
 export const cardToId = (card: Card): number =>
   rank[card.rank] * 4 + suit[card.suit];
+
+export const idToCard = (id: number): Card => {
+  if (id < 0 || id > numberOfCards - 1) {
+    throw new Error(`Id(${id}) is not a card id`);
+  }
+
+  return {
+    rank: reverseRank[`${Math.floor(id / 4)}`],
+    suit: reverseSuit[`${id % 4}`],
+  };
+};
 
 export const parse = (str: string): Card => {
   if (str.length === 2) {
@@ -50,7 +65,7 @@ export const parse = (str: string): Card => {
   throw new Error("Unexpected Card input");
 };
 
-export const describeCard = (card: Card): string => `${card.rank}${card.suit}`;
+export const stringify = (card: Card): string => `${card.rank}${card.suit}`;
 
 const minCards = 5;
 const maxCards = 7;

@@ -36,4 +36,23 @@ describe("Card", () => {
   ])("parse (%s)", (input, id: number) => {
     expect(poker.cardToId(poker.parse(input))).toBe(id);
   });
+
+  test.each([
+    [0, "2", "C"],
+    [1, "2", "D"],
+    [2, "2", "H"],
+    [3, "2", "S"],
+    [32, "T", "C"],
+    [36, "J", "C"],
+    [40, "Q", "C"],
+    [44, "K", "C"],
+    [48, "A", "C"],
+  ] as [number, poker.Rank, poker.Suit][])(
+    "from id(%i, %s%s)",
+    (id: number, rank: poker.Rank, suit: poker.Suit) => {
+      const card = poker.idToCard(id);
+      expect(card.rank).toBe(rank);
+      expect(card.suit).toBe(suit);
+    }
+  );
 });
