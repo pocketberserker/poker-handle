@@ -6,6 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "test": "run-s test:*",
+    "test:tsc": "tsc --noEmit -p ./tsconfig.test.json",
+    "test:jest": "jest",
     "lint": "run-p -l -c --aggregate-output lint:*",
     "lint:next": "next lint",
     "lint:prettier": "prettier --check .",
@@ -29,12 +32,16 @@
     "sanitize.css": "^13.0.0"
   },
   "devDependencies": {
+    "@swc/core": "^1.2.155",
+    "@swc/jest": "^0.2.20",
+    "@types/jest": "^27.4.1",
     "@types/node": "^17.0.21",
     "@types/react": "^17.0.40",
     "eslint": "^8.11.0",
     "eslint-config-next": "12.1.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-import-resolver-typescript": "^2.5.0",
+    "jest": "^27.5.1",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.5.1",
     "typescript": "^4.6.2"
