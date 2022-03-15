@@ -1,1 +1,1 @@
-export const appName = "pokerle";
+export const appName = "Poker Handle";
