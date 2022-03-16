@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
 import * as poker from "../../../poker";
-import { Card } from "../../molecules/Card";
+import { Card } from "../../atoms/Card";
 
 type Props = {
   name: string;
@@ -33,12 +33,11 @@ const Area = styled.div`
 `;
 
 const Name = styled.div`
-  margin-top: 20px;
   font-weight: bold;
   color: ${(props) => props.theme.palette.text.primary};
 `;
 
 const InputCard = styled(Card)`
-  margin: 10px 20px;
+  margin: 10px 5px;
   max-width: 60px;
 `;

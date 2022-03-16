@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Tab, Tabs } from "@mui/material";
 import styled from "@emotion/styled";
-import { Card } from "../../molecules/Card";
+import { Card } from "../../atoms/Card";
 import * as poker from "../../../poker";
 import { wordle } from "../../constants/theme";
 
@@ -43,7 +43,6 @@ const Panel = styled.div`
   justify-content: center;
   align-items: center;
 `;
-
 
 const InputCard = styled(Card)`
   max-width: 40px;
@@ -93,7 +92,7 @@ export const InputPanel: React.FC<InputPanelProps> = ({ className }) => {
 };
 
 const TabWrapper = styled.div`
-  background: ${wordle.green};
+  background: ${wordle.correct};
   color: ${(props) => props.theme.palette.primary.contrastText};
   width: 90%;
 `;

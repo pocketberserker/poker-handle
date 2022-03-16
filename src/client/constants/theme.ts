@@ -6,17 +6,9 @@ export type Theme = {
   };
 };
 
-const lightTheme: Theme = {
-  // background: {
-  //   default: '#ffffff',
-  // },
-};
+const lightTheme: Theme = {};
 
-const darkTheme: Theme = {
-  // background: {
-  //   default: '#222639',
-  // },
-};
+const darkTheme: Theme = {};
 
 export const getTheme = (colorMode: ColorMode): Theme => {
   if (colorMode === "light") {
@@ -26,6 +18,8 @@ export const getTheme = (colorMode: ColorMode): Theme => {
 };
 
 export const wordle = {
-  green: "#6aaa64",
-  yellow: "#c9b458",
+  correct: "#6aaa64",
+  partial: "#c9b458",
+  absent: "#787c7e",
+  border: "#d3d6da",
 };
