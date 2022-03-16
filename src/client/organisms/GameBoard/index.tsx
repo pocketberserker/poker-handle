@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
+import { useMobile } from "../../hooks/MediaQuery";
 import { Hands } from "../../molecules/Hands";
 import { Board } from "../../molecules/Board";
 import { InputPanel } from "../../organisms/InputPanel";
@@ -11,7 +12,23 @@ type Props = {
 };
 
 export const GameBoard: React.FC<Props> = ({ board }) => {
+  const { isMobile } = useMobile();
+
   const inputs = Array(maxTryCount).fill(Array(5).fill({ kind: "blank" }));
+
+  if (isMobile) {
+    return (
+      <>
+        <MobileMainBoard>
+          <Hands name="you" cards={board.player} />
+          <Board inputs={inputs} />
+          <Hands name="other" cards={board.opponent} />
+        </MobileMainBoard>
+        <MobileInput />
+      </>
+    );
+  }
+
   return (
     <>
       <MainBoard>
@@ -32,7 +49,15 @@ const MainBoard = styled.div`
   align-items: center;
 `;
 
+const MobileMainBoard = styled(MainBoard)`
+  margin-top: 12px;
+`;
+
 const Input = styled(InputPanel)`
   margin-top: 40px;
   max-width: 400px;
+`;
+
+const MobileInput = styled(Input)`
+  margin-top: 12px;
 `;
