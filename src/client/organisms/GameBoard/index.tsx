@@ -59,5 +59,6 @@ const Input = styled(InputPanel)`
 `;
 
 const MobileInput = styled(Input)`
-  margin-top: 12px;
+  margin-top: 10px;
+  width: 98%;
 `;

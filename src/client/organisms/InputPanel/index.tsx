@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Tab, Tabs } from "@mui/material";
+import { Tab, Tabs, Button } from "@mui/material";
+import { Backspace, KeyboardReturn } from "@mui/icons-material";
 import styled from "@emotion/styled";
 import { Card } from "../../atoms/Card";
 import * as poker from "../../../poker";
@@ -37,7 +38,6 @@ const SuitPanel: React.FC<SuitPanelProps> = ({ suit, value, index }) => (
 );
 
 const Panel = styled.div`
-  padding: 10px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -47,6 +47,44 @@ const Panel = styled.div`
 const InputCard = styled(Card)`
   max-width: 40px;
   margin: 5px 2px;
+`;
+
+const ButtonPanel: React.FC = () => (
+  <ButtonPanelContainer>
+    <IconButton disableRipple>
+      <BackspaceIcon />
+    </IconButton>
+    <IconButton disableRipple>
+      <EnterIcon />
+    </IconButton>
+  </ButtonPanelContainer>
+);
+
+const ButtonPanelContainer = styled.div`
+  margin: 0 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-center: center;
+`;
+
+const IconButton = styled(Button)`
+  margin: 5px 0;
+  min-width: 50px;
+  background: ${wordle.correct};
+  color: ${wordle.correct};
+
+  &:hover {
+    background: ${wordle.correct};
+  }
+`;
+
+const EnterIcon = styled(KeyboardReturn)`
+  color: ${(props) => props.theme.palette.primary.contrastText};
+`;
+
+const BackspaceIcon = styled(Backspace)`
+  color: ${(props) => props.theme.palette.primary.contrastText};
 `;
 
 type InputPanelProps = {
@@ -76,6 +114,7 @@ export const InputPanel: React.FC<InputPanelProps> = ({ className }) => {
           aria-label="tabs"
           centered
           textColor="inherit"
+          orientation="vertical"
         >
           <SuitTab label="♣" {...a11yProps(0)} />
           <SuitTab label="♦" {...a11yProps(1)} />
@@ -87,14 +126,15 @@ export const InputPanel: React.FC<InputPanelProps> = ({ className }) => {
       <SuitPanel suit="D" value={value} index={1} />
       <SuitPanel suit="H" value={value} index={2} />
       <SuitPanel suit="S" value={value} index={3} />
+      <ButtonPanel />
     </Container>
   );
 };
 
 const TabWrapper = styled.div`
+  margin: 0 5px;
   background: ${wordle.correct};
   color: ${(props) => props.theme.palette.primary.contrastText};
-  width: 90%;
 `;
 
 const SuitTab = styled(Tab)`
@@ -104,7 +144,6 @@ const SuitTab = styled(Tab)`
 
 const Container = styled.div`
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
