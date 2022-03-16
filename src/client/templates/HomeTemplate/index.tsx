@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "@emotion/styled";
 import { TemplateLayout as Layout } from "../../organisms/TemplateLayout";
 import { Hands } from "../../organisms/Hands";
-import { Card } from "../../molecules/Card";
-import * as poker from "../../../poker";
+import { InputPanel } from "../../organisms/InputPanel";
 import { Board } from "../../generator";
 
 type Props = {
@@ -17,12 +16,7 @@ export const HomeTemplate: React.FC<Props> = ({ board }) => {
         <Hands name="you" cards={board.player} />
         <Hands name="opponent" cards={board.opponent} />
       </Board>
-      <Input>
-        {poker.ranks.map((rank) => {
-          const card: poker.Card = { rank, suit: "C" };
-          return <InputCard key={poker.stringify(card)} card={card} />;
-        })}
-      </Input>
+      <Input />
     </Layout>
   );
 };
@@ -33,16 +27,7 @@ const Board = styled.div`
   align-items: center;
 `;
 
-const InputCard = styled(Card)`
-  max-width: 40px;
-  margin: 5px 2px;
-`;
-
-const Input = styled.div`
+const Input = styled(InputPanel)`
   margin-top: 20px;
-  max-width: 400px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
+  width: 400px;
 `;

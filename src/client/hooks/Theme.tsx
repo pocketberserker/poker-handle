@@ -1,5 +1,4 @@
-import { createContext, useContext } from "react";
-import { ColorMode } from "../constants/theme";
+import { createContext } from "react";
 
 export type ThemeContextType = {
   setColorMode: () => void;
@@ -10,4 +9,3 @@ const defaultContext: ThemeContextType = {
 };
 
 export const ThemeContext = createContext<ThemeContextType>(defaultContext);
-export const useTheme = () => useContext(ThemeContext);

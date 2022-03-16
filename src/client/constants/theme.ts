@@ -24,3 +24,8 @@ export const getTheme = (colorMode: ColorMode): Theme => {
   }
   return darkTheme;
 };
+
+export const wordle = {
+  green: "#6aaa64",
+  yellow: "#c9b458",
+};
