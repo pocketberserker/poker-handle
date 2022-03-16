@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Tab, Tabs, Button } from "@mui/material";
-import { Backspace, KeyboardReturn } from "@mui/icons-material";
 import styled from "@emotion/styled";
-import { Card } from "../../atoms/Card";
+import { CardButton } from "../../molecules/CardButton";
+import { BackspaceButton } from "../../molecules/BackspaceButton";
+import { EnterButton } from "../../molecules/EnterButton";
+import { SuitTabs } from "../SuitTabs";
 import * as poker from "../../../poker";
 import { wordle } from "../../constants/theme";
 
@@ -23,14 +24,7 @@ const SuitPanel: React.FC<SuitPanelProps> = ({ suit, value, index }) => (
       <Panel>
         {poker.ranks.map((rank) => {
           const card: poker.Card = { rank, suit };
-          return (
-            <InputCard
-              key={poker.stringify(card)}
-              card={card}
-              width={40}
-              height={58}
-            />
-          );
+          return <CardButton key={poker.stringify(card)} card={card} />;
         })}
       </Panel>
     )}
@@ -44,19 +38,10 @@ const Panel = styled.div`
   align-items: center;
 `;
 
-const InputCard = styled(Card)`
-  max-width: 40px;
-  margin: 5px 2px;
-`;
-
 const ButtonPanel: React.FC = () => (
   <ButtonPanelContainer>
-    <IconButton disableRipple>
-      <BackspaceIcon />
-    </IconButton>
-    <IconButton disableRipple>
-      <EnterIcon />
-    </IconButton>
+    <BackspaceButton />
+    <EnterButton />
   </ButtonPanelContainer>
 );
 
@@ -68,64 +53,22 @@ const ButtonPanelContainer = styled.div`
   align-center: center;
 `;
 
-const IconButton = styled(Button)`
-  margin: 5px 0;
-  min-width: 50px;
-  background: ${wordle.correct};
-  color: ${wordle.correct};
-
-  &:hover {
-    background: ${wordle.correct};
-  }
-`;
-
-const EnterIcon = styled(KeyboardReturn)`
-  color: ${(props) => props.theme.palette.primary.contrastText};
-`;
-
-const BackspaceIcon = styled(Backspace)`
-  color: ${(props) => props.theme.palette.primary.contrastText};
-`;
-
 type InputPanelProps = {
   className?: string;
 };
 
-const a11yProps = (index: number) => {
-  return {
-    id: `suit-tab-${index}`,
-    "aria-controls": `suit-tabpanel-${index}`,
-  };
-};
-
 export const InputPanel: React.FC<InputPanelProps> = ({ className }) => {
-  const [value, setValue] = useState(0);
-
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
+  const [tab, setTab] = useState(0);
 
   return (
     <Container className={className}>
       <TabWrapper>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label="tabs"
-          centered
-          textColor="inherit"
-          orientation="vertical"
-        >
-          <SuitTab label="♣" {...a11yProps(0)} />
-          <SuitTab label="♦" {...a11yProps(1)} />
-          <SuitTab label="♥" {...a11yProps(2)} />
-          <SuitTab label="♠" {...a11yProps(3)} />
-        </Tabs>
+        <SuitTabs value={tab} handleChange={setTab} />
       </TabWrapper>
-      <SuitPanel suit="C" value={value} index={0} />
-      <SuitPanel suit="D" value={value} index={1} />
-      <SuitPanel suit="H" value={value} index={2} />
-      <SuitPanel suit="S" value={value} index={3} />
+      <SuitPanel suit="C" value={tab} index={0} />
+      <SuitPanel suit="D" value={tab} index={1} />
+      <SuitPanel suit="H" value={tab} index={2} />
+      <SuitPanel suit="S" value={tab} index={3} />
       <ButtonPanel />
     </Container>
   );
@@ -135,11 +78,6 @@ const TabWrapper = styled.div`
   margin: 0 5px;
   background: ${wordle.correct};
   color: ${(props) => props.theme.palette.primary.contrastText};
-`;
-
-const SuitTab = styled(Tab)`
-  font-size: 20px;
-  min-width: 50px;
 `;
 
 const Container = styled.div`

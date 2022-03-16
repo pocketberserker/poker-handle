@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { AppBar } from "../AppBar";
+import { AppBar } from "../../molecules/AppBar";
 import { Footer } from "../Footer";
+import { appName } from "../../constants/meta";
 
 type Props = {
   children: React.ReactNode;
@@ -10,7 +11,7 @@ type Props = {
 export const TemplateLayout: React.FC<Props> = ({ children }) => {
   return (
     <Wrapper>
-      <AppBar />
+      <AppBar appName={appName} />
       <Container>{children}</Container>
       <Footer />
     </Wrapper>

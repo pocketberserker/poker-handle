@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
+import { Image } from "../../atoms/Image";
 import * as poker from "../../../poker";
 
 type Props = {
@@ -53,15 +54,12 @@ const getCardImageUrl = (rank: poker.Rank, suit: poker.Suit): string => {
 
 export const Card: React.FC<Props> = ({ card, width, height, className }) => {
   return (
-    <div className={className}>
-      <CardImage
-        src={getCardImageUrl(card.rank, card.suit)}
-        alt={poker.stringify(card)}
-        width={width}
-        height={height}
-      />
-    </div>
+    <Image
+      className={className}
+      src={getCardImageUrl(card.rank, card.suit)}
+      alt={poker.stringify(card)}
+      width={width}
+      height={height}
+    />
   );
 };
-
-const CardImage = styled.img``;

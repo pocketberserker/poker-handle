@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { useMobile } from "../../hooks/MediaQuery";
-import { Hands } from "../../molecules/Hands";
+import { Hands } from "../Hands";
 import { Board } from "../../molecules/Board";
 import { InputPanel } from "../../organisms/InputPanel";
 import { Board as BoardModel } from "../../generator";

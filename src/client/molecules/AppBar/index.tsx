@@ -1,11 +1,12 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { AppBar as BaseAppBar, Box, Toolbar, Typography } from "@mui/material";
-import { appName } from "../../constants/meta";
 
-type Props = {};
+type Props = {
+  appName: string;
+};
 
-export const AppBar: React.FC<Props> = () => {
+export const AppBar: React.FC<Props> = ({ appName }) => {
   return (
     <BaseAppBar position="relative">
       <CustomToolbar>

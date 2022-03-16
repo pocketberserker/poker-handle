@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { Card } from "../../atoms/Card";
+import { Card } from "../../molecules/Card";
 import * as poker from "../../../poker";
 import { wordle } from "../../constants/theme";
 
