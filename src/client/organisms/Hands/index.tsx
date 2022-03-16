@@ -29,6 +29,8 @@ const Area = styled.div`
 
 const Name = styled.div`
   margin-top: 20px;
+  font-weight: bold;
+  color: ${(props) => props.theme.palette.text.primary};
 `;
 
 const InputCard = styled(Card)`
