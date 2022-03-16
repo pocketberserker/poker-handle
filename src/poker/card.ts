@@ -1,7 +1,7 @@
 import * as hash from "./hash";
 import * as tables from "./tables";
 
-const ranks = [
+export const ranks = [
   "2",
   "3",
   "4",
@@ -22,7 +22,7 @@ export type Rank = typeof ranks[number];
 const rank = Object.fromEntries(ranks.map((r, i) => [r, i]));
 const reverseRank = Object.fromEntries(ranks.map((r, i) => [`${i}`, r]));
 
-const suits = ["C", "D", "H", "S"] as const;
+export const suits = ["C", "D", "H", "S"] as const;
 
 export type Suit = typeof suits[number];
 
