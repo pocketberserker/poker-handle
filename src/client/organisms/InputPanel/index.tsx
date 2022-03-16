@@ -11,6 +11,7 @@ type SuitPanelProps = {
   suit: poker.Suit;
   index: number;
   value: number;
+  hands: poker.Card[];
   handleSelect: (card: poker.Card) => void;
 };
 
@@ -18,6 +19,7 @@ const SuitPanel: React.FC<SuitPanelProps> = ({
   suit,
   value,
   index,
+  hands,
   handleSelect,
 }) => (
   <div
@@ -35,6 +37,9 @@ const SuitPanel: React.FC<SuitPanelProps> = ({
               key={poker.stringify(card)}
               card={card}
               click={(c) => handleSelect(c)}
+              disabled={
+                hands.findIndex((c) => poker.equalsCard(c, card)) !== -1
+              }
             />
           );
         })}
@@ -74,6 +79,7 @@ const ButtonPanelContainer = styled.div`
 `;
 
 type InputPanelProps = {
+  hands: poker.Card[];
   handleSelect: (card: poker.Card) => void;
   handleEnter: () => void;
   handleBackspace: () => void;
@@ -81,6 +87,7 @@ type InputPanelProps = {
 };
 
 export const InputPanel: React.FC<InputPanelProps> = ({
+  hands,
   handleSelect,
   handleEnter,
   handleBackspace,
@@ -93,10 +100,34 @@ export const InputPanel: React.FC<InputPanelProps> = ({
       <TabWrapper>
         <SuitTabs value={tab} handleChange={setTab} />
       </TabWrapper>
-      <SuitPanel suit="C" value={tab} index={0} handleSelect={handleSelect} />
-      <SuitPanel suit="D" value={tab} index={1} handleSelect={handleSelect} />
-      <SuitPanel suit="H" value={tab} index={2} handleSelect={handleSelect} />
-      <SuitPanel suit="S" value={tab} index={3} handleSelect={handleSelect} />
+      <SuitPanel
+        suit="C"
+        value={tab}
+        index={0}
+        hands={hands}
+        handleSelect={handleSelect}
+      />
+      <SuitPanel
+        suit="D"
+        value={tab}
+        index={1}
+        hands={hands}
+        handleSelect={handleSelect}
+      />
+      <SuitPanel
+        suit="H"
+        value={tab}
+        index={2}
+        hands={hands}
+        handleSelect={handleSelect}
+      />
+      <SuitPanel
+        suit="S"
+        value={tab}
+        index={3}
+        hands={hands}
+        handleSelect={handleSelect}
+      />
       <ButtonPanel
         handleEnter={handleEnter}
         handleBackspace={handleBackspace}

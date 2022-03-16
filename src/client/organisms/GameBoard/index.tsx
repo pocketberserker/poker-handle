@@ -133,6 +133,7 @@ export const GameBoard: React.FC<Props> = ({
           <Hands name="other" cards={board.opponent} />
         </MobileMainBoard>
         <MobileInput
+          hands={[...board.player, ...board.opponent]}
           handleSelect={handleSelect}
           handleEnter={handleEnter}
           handleBackspace={handleBackspace}
@@ -149,6 +150,7 @@ export const GameBoard: React.FC<Props> = ({
         <Hands name="other" cards={board.opponent} />
       </MainBoard>
       <Input
+        hands={[...board.player, ...board.opponent]}
         handleSelect={handleSelect}
         handleEnter={handleEnter}
         handleBackspace={handleBackspace}
