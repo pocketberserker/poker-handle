@@ -29,5 +29,5 @@ const Board = styled.div`
 
 const Input = styled(InputPanel)`
   margin-top: 20px;
-  width: 400px;
+  max-width: 400px;
 `;

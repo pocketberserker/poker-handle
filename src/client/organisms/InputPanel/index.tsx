@@ -44,6 +44,7 @@ const Panel = styled.div`
   align-items: center;
 `;
 
+
 const InputCard = styled(Card)`
   max-width: 40px;
   margin: 5px 2px;
@@ -94,10 +95,12 @@ export const InputPanel: React.FC<InputPanelProps> = ({ className }) => {
 const TabWrapper = styled.div`
   background: ${wordle.green};
   color: ${(props) => props.theme.palette.primary.contrastText};
+  width: 90%;
 `;
 
 const SuitTab = styled(Tab)`
   font-size: 20px;
+  min-width: 50px;
 `;
 
 const Container = styled.div`
@@ -105,4 +108,5 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
 `;
