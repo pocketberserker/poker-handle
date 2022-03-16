@@ -26,6 +26,7 @@ export const GameBoard: React.FC<Props> = ({
   const [column, setColumn] = useState(
     alreadyAnswered ? init[init.length].length : 0
   );
+  const [absents, setAbsents] = useState([...board.player, ...board.opponent]);
   const [checking, setChecking] = useState(false);
 
   const handleSelect = (card: poker.Card) => {
@@ -83,6 +84,7 @@ export const GameBoard: React.FC<Props> = ({
 
   const checkAnswer = async (current: number, count: number) => {
     const newRow: Guess[] = [];
+    const newAbsents: poker.Card[] = [];
 
     for (const [i, s] of guesses[current].entries()) {
       // TODO: show error message
@@ -95,6 +97,8 @@ export const GameBoard: React.FC<Props> = ({
         kind = "correct";
       } else if (board.common.find((c) => poker.equalsCard(c, s.card))) {
         kind = "partial-match";
+      } else {
+        newAbsents.push(s.card);
       }
 
       newRow.push({
@@ -106,6 +110,7 @@ export const GameBoard: React.FC<Props> = ({
     const next = [...guesses];
     next[current] = newRow;
     setGuesses(next);
+    setAbsents((prev) => [...prev, ...newAbsents]);
 
     setTrials(count + 1);
     setColumn(0);
@@ -133,7 +138,7 @@ export const GameBoard: React.FC<Props> = ({
           <Hands name="other" cards={board.opponent} />
         </MobileMainBoard>
         <MobileInput
-          hands={[...board.player, ...board.opponent]}
+          absents={absents}
           handleSelect={handleSelect}
           handleEnter={handleEnter}
           handleBackspace={handleBackspace}
@@ -150,7 +155,7 @@ export const GameBoard: React.FC<Props> = ({
         <Hands name="other" cards={board.opponent} />
       </MainBoard>
       <Input
-        hands={[...board.player, ...board.opponent]}
+        absents={absents}
         handleSelect={handleSelect}
         handleEnter={handleEnter}
         handleBackspace={handleBackspace}

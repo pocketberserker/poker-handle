@@ -10,7 +10,7 @@ type SuitPanelProps = {
   suit: poker.Suit;
   index: number;
   value: number;
-  hands: poker.Card[];
+  absents: poker.Card[];
   handleSelect: (card: poker.Card) => void;
 };
 
@@ -18,7 +18,7 @@ const SuitPanel: React.FC<SuitPanelProps> = ({
   suit,
   value,
   index,
-  hands,
+  absents,
   handleSelect,
 }) => (
   <div
@@ -37,7 +37,7 @@ const SuitPanel: React.FC<SuitPanelProps> = ({
               card={card}
               click={(c) => handleSelect(c)}
               disabled={
-                hands.findIndex((c) => poker.equalsCard(c, card)) !== -1
+                absents.findIndex((c) => poker.equalsCard(c, card)) !== -1
               }
             />
           );
@@ -78,7 +78,7 @@ const ButtonPanelContainer = styled.div`
 `;
 
 type InputPanelProps = {
-  hands: poker.Card[];
+  absents: poker.Card[];
   handleSelect: (card: poker.Card) => void;
   handleEnter: () => void;
   handleBackspace: () => void;
@@ -86,7 +86,7 @@ type InputPanelProps = {
 };
 
 export const InputPanel: React.FC<InputPanelProps> = ({
-  hands,
+  absents,
   handleSelect,
   handleEnter,
   handleBackspace,
@@ -103,28 +103,28 @@ export const InputPanel: React.FC<InputPanelProps> = ({
         suit="C"
         value={tab}
         index={0}
-        hands={hands}
+        absents={absents}
         handleSelect={handleSelect}
       />
       <SuitPanel
         suit="D"
         value={tab}
         index={1}
-        hands={hands}
+        absents={absents}
         handleSelect={handleSelect}
       />
       <SuitPanel
         suit="H"
         value={tab}
         index={2}
-        hands={hands}
+        absents={absents}
         handleSelect={handleSelect}
       />
       <SuitPanel
         suit="S"
         value={tab}
         index={3}
-        hands={hands}
+        absents={absents}
         handleSelect={handleSelect}
       />
       <ButtonPanel
