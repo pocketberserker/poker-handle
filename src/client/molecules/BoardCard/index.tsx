@@ -1,34 +1,8 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { Card } from "../../molecules/Card";
-import * as poker from "../../../poker";
+import { InputState } from "../../state";
 import { wordle } from "../../constants/theme";
-
-export type InputState = Blank | Entered | PartialMatch | Absent | Correct;
-
-export type Blank = {
-  kind: "blank";
-};
-
-export type Entered = {
-  kind: "entered";
-  card: poker.Card;
-};
-
-export type PartialMatch = {
-  kind: "partial-match";
-  card: poker.Card;
-};
-
-export type Absent = {
-  kind: "absent";
-  card: poker.Card;
-};
-
-export type Correct = {
-  kind: "correct";
-  card: poker.Card;
-};
 
 type Props = {
   state: InputState;
@@ -80,5 +54,5 @@ const Confirmed = styled.div`
   height: 100%;
   width: 100%;
   z-index: 1;
-  opacity: 0.5;
+  opacity: 0.7;
 `;

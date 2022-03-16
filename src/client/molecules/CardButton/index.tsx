@@ -5,10 +5,15 @@ import * as poker from "../../../poker";
 
 type Props = {
   card: poker.Card;
+  click: (card: poker.Card) => void;
 };
 
-export const CardButton: React.FC<Props> = ({ card }) => {
-  return <StyledCard card={card} width={40} height={58} />;
+export const CardButton: React.FC<Props> = ({ card, click }) => {
+  return (
+    <div onClick={() => click(card)}>
+      <StyledCard card={card} width={40} height={58} />
+    </div>
+  );
 };
 
 const StyledCard = styled(Card)`

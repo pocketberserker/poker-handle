@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { InputState, BoardCard } from "../BoardCard";
+import { BoardCard } from "../BoardCard";
+import { InputState } from "../../state";
 import * as poker from "../../../poker";
 
 type AnswerProps = {

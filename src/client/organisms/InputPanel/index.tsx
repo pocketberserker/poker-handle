@@ -11,9 +11,15 @@ type SuitPanelProps = {
   suit: poker.Suit;
   index: number;
   value: number;
+  handleSelect: (card: poker.Card) => void;
 };
 
-const SuitPanel: React.FC<SuitPanelProps> = ({ suit, value, index }) => (
+const SuitPanel: React.FC<SuitPanelProps> = ({
+  suit,
+  value,
+  index,
+  handleSelect,
+}) => (
   <div
     role="tabpanel"
     hidden={value !== index}
@@ -24,7 +30,13 @@ const SuitPanel: React.FC<SuitPanelProps> = ({ suit, value, index }) => (
       <Panel>
         {poker.ranks.map((rank) => {
           const card: poker.Card = { rank, suit };
-          return <CardButton key={poker.stringify(card)} card={card} />;
+          return (
+            <CardButton
+              key={poker.stringify(card)}
+              card={card}
+              click={(c) => handleSelect(c)}
+            />
+          );
         })}
       </Panel>
     )}
@@ -38,10 +50,18 @@ const Panel = styled.div`
   align-items: center;
 `;
 
-const ButtonPanel: React.FC = () => (
+type ButtonPanelProps = {
+  handleEnter: () => void;
+  handleBackspace: () => void;
+};
+
+const ButtonPanel: React.FC<ButtonPanelProps> = ({
+  handleEnter,
+  handleBackspace,
+}) => (
   <ButtonPanelContainer>
-    <BackspaceButton />
-    <EnterButton />
+    <BackspaceButton click={handleBackspace} />
+    <EnterButton click={handleEnter} />
   </ButtonPanelContainer>
 );
 
@@ -54,10 +74,18 @@ const ButtonPanelContainer = styled.div`
 `;
 
 type InputPanelProps = {
+  handleSelect: (card: poker.Card) => void;
+  handleEnter: () => void;
+  handleBackspace: () => void;
   className?: string;
 };
 
-export const InputPanel: React.FC<InputPanelProps> = ({ className }) => {
+export const InputPanel: React.FC<InputPanelProps> = ({
+  handleSelect,
+  handleEnter,
+  handleBackspace,
+  className,
+}) => {
   const [tab, setTab] = useState(0);
 
   return (
@@ -65,11 +93,14 @@ export const InputPanel: React.FC<InputPanelProps> = ({ className }) => {
       <TabWrapper>
         <SuitTabs value={tab} handleChange={setTab} />
       </TabWrapper>
-      <SuitPanel suit="C" value={tab} index={0} />
-      <SuitPanel suit="D" value={tab} index={1} />
-      <SuitPanel suit="H" value={tab} index={2} />
-      <SuitPanel suit="S" value={tab} index={3} />
-      <ButtonPanel />
+      <SuitPanel suit="C" value={tab} index={0} handleSelect={handleSelect} />
+      <SuitPanel suit="D" value={tab} index={1} handleSelect={handleSelect} />
+      <SuitPanel suit="H" value={tab} index={2} handleSelect={handleSelect} />
+      <SuitPanel suit="S" value={tab} index={3} handleSelect={handleSelect} />
+      <ButtonPanel
+        handleEnter={handleEnter}
+        handleBackspace={handleBackspace}
+      />
     </Container>
   );
 };

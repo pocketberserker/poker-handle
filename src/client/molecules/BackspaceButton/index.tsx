@@ -4,12 +4,13 @@ import styled from "@emotion/styled";
 import { IconButton } from "../../atoms/IconButton";
 
 type Props = {
+  click: () => void;
   className?: string;
 };
 
-export const BackspaceButton: React.FC<Props> = ({ className }) => {
+export const BackspaceButton: React.FC<Props> = ({ click, className }) => {
   return (
-    <IconButton className={className}>
+    <IconButton className={className} click={click}>
       <BackspaceIcon />
     </IconButton>
   );

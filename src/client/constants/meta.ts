@@ -1,3 +1,3 @@
 export const appName = "Poker Handle";
 
-export const maxTryCount = 6;
+export const maxTrials = 6;

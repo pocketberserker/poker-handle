@@ -110,3 +110,6 @@ export const evaluate = (cards: Card[]): number => {
 
   return noFlush[hash.quinary(quinary, size)];
 };
+
+export const equalsCard = (a: Card, b: Card): boolean =>
+  a.rank === b.rank && a.suit === b.suit;
