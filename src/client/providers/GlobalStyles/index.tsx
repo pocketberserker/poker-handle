@@ -1,8 +1,15 @@
 import React from "react";
 import { Global, css } from "@emotion/react";
-import { theme } from "../../constants/theme";
 
-export const GlobalStyles: React.FC = () => (
+type Props = {
+  theme: {
+    background: {
+      default: string;
+    };
+  };
+};
+
+export const GlobalStyles: React.FC<Props> = ({ theme }) => (
   <Global
     styles={css`
       html {
@@ -11,8 +18,7 @@ export const GlobalStyles: React.FC = () => (
       body {
         padding: 0;
         margin: 0;
-        color: #333;
-        background: ${theme.colors.background};
+        background: ${theme.background.default};
         font-size: 1.4rem;
         font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue",
           "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Meiryo", "メイリオ",

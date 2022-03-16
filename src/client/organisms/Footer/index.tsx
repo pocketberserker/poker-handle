@@ -14,8 +14,6 @@ const Wrapper = styled.footer`
   min-height: 40px;
   margin-top: auto;
   padding: 10px;
-  background: ${({ theme }) => theme.colors.primary};
-  color: ${({ theme }) => theme.colors.white};
 `;
 
 const Container = styled.div`
