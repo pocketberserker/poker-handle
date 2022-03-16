@@ -5,7 +5,6 @@ import { BackspaceButton } from "../../molecules/BackspaceButton";
 import { EnterButton } from "../../molecules/EnterButton";
 import { SuitTabs } from "../SuitTabs";
 import * as poker from "../../../poker";
-import { wordle } from "../../constants/theme";
 
 type SuitPanelProps = {
   suit: poker.Suit;
@@ -138,8 +137,8 @@ export const InputPanel: React.FC<InputPanelProps> = ({
 
 const TabWrapper = styled.div`
   margin: 0 5px;
-  background: ${wordle.correct};
-  color: ${(props) => props.theme.palette.primary.contrastText};
+  background: ${({ theme }) => theme.wordle.correct};
+  color: ${({ theme }) => theme.palette.primary.contrastText};
 `;
 
 const Container = styled.div`

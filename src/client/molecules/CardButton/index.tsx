@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { Card } from "../Card";
-import { wordle } from "../../constants/theme";
 import * as poker from "../../../poker";
 
 type Props = {
@@ -44,7 +43,7 @@ const Disabled = styled.div`
   width: 100%;
   z-index: 1;
   opacity: 0.7;
-  background-color: ${wordle.absent};
+  background-color: ${({ theme }) => theme.wordle.absent};
 `;
 
 const StyledCard = styled(Card)`

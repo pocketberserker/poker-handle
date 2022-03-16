@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "@emotion/styled";
+import { useTheme } from "@mui/material/styles";
 import { Card } from "../../molecules/Card";
 import { InputState } from "../../state";
-import { wordle } from "../../constants/theme";
 
 type Props = {
   state: InputState;
@@ -12,17 +12,19 @@ const width = 40;
 const height = 58;
 
 export const BoardCard: React.FC<Props> = ({ state }) => {
+  const theme = useTheme();
+
   let image = <div />;
   let confirmed: string | undefined;
   if (state.kind !== "blank") {
     image = <Card card={state.card} width={width} height={height} />;
 
     if (state.kind === "absent") {
-      confirmed = wordle.absent;
+      confirmed = theme.wordle.absent;
     } else if (state.kind === "partial-match") {
-      confirmed = wordle.partial;
+      confirmed = theme.wordle.partial;
     } else if (state.kind === "correct") {
-      confirmed = wordle.correct;
+      confirmed = theme.wordle.correct;
     }
   }
 
@@ -30,7 +32,9 @@ export const BoardCard: React.FC<Props> = ({ state }) => {
     <Wrapper
       style={{
         border:
-          state.kind === "blank" ? `1.5px solid ${wordle.border}` : undefined,
+          state.kind === "blank"
+            ? `1.5px solid ${theme.wordle.border}`
+            : undefined,
       }}
     >
       {confirmed && <Confirmed style={{ backgroundColor: confirmed }} />}

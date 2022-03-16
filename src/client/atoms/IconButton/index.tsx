@@ -1,7 +1,6 @@
 import React from "react";
 import { Button } from "@mui/material";
 import styled from "@emotion/styled";
-import { wordle } from "../../constants/theme";
 
 type Props = {
   click: () => void;
@@ -20,10 +19,10 @@ export const IconButton: React.FC<Props> = ({ click, children, className }) => {
 const StyledButton = styled(Button)`
   margin: 5px 0;
   min-width: 50px;
-  background: ${wordle.correct};
-  color: ${wordle.correct};
+  background: ${({ theme }) => theme.wordle.correct};
+  color: ${({ theme }) => theme.wordle.correct};
 
   &:hover {
-    background: ${wordle.correct};
+    background: ${({ theme }) => theme.wordle.correct};
   }
 `;
