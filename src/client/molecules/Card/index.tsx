@@ -3,8 +3,7 @@ import styled from "@emotion/styled";
 import * as poker from "../../../poker";
 
 type Props = {
-  rank: poker.Rank;
-  suit: poker.Suit;
+  card: poker.Card;
   className?: string;
 };
 
@@ -50,12 +49,12 @@ const getCardImageUrl = (rank: poker.Rank, suit: poker.Suit): string => {
   return `images/cards/card_${s}_${n}.png`;
 };
 
-export const Card: React.FC<Props> = ({ rank, suit, className }) => {
+export const Card: React.FC<Props> = ({ card, className }) => {
   return (
     <div className={className}>
       <Image
-        src={getCardImageUrl(rank, suit)}
-        alt={poker.stringify({ rank, suit })}
+        src={getCardImageUrl(card.rank, card.suit)}
+        alt={poker.stringify(card)}
       />
     </div>
   );

@@ -1,5 +1,5 @@
 import * as poker from "../src/poker";
-import { generate } from "../src/client/poker";
+import { generate } from "../src/client/generator";
 
 const main = () => {
   const now = new Date();
