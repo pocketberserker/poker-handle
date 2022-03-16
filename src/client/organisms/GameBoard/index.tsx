@@ -27,6 +27,8 @@ export const GameBoard: React.FC<Props> = ({
     alreadyAnswered ? init[init.length].length : 0
   );
   const [absents, setAbsents] = useState([...board.player, ...board.opponent]);
+  const [corrects, setCorrects] = useState<poker.Card[]>([]);
+  const [partials, setPartials] = useState<poker.Card[]>([]);
   const [checking, setChecking] = useState(false);
 
   const handleSelect = (card: poker.Card) => {
@@ -85,6 +87,8 @@ export const GameBoard: React.FC<Props> = ({
   const checkAnswer = async (current: number, count: number) => {
     const newRow: Guess[] = [];
     const newAbsents: poker.Card[] = [];
+    const newCorrects: poker.Card[] = [];
+    const newPartials: poker.Card[] = [];
 
     for (const [i, s] of guesses[current].entries()) {
       // TODO: show error message
@@ -95,8 +99,10 @@ export const GameBoard: React.FC<Props> = ({
       let kind: "correct" | "absent" | "partial-match" = "absent";
       if (poker.equalsCard(s.card, board.common[i])) {
         kind = "correct";
+        newCorrects.push(s.card);
       } else if (board.common.find((c) => poker.equalsCard(c, s.card))) {
         kind = "partial-match";
+        newPartials.push(s.card);
       } else {
         newAbsents.push(s.card);
       }
@@ -110,7 +116,30 @@ export const GameBoard: React.FC<Props> = ({
     const next = [...guesses];
     next[current] = newRow;
     setGuesses(next);
+
     setAbsents((prev) => [...prev, ...newAbsents]);
+    setCorrects((prev) => {
+      const ns: poker.Card[] = [];
+      for (const c of newCorrects) {
+        if (prev.findIndex((p) => poker.equalsCard(p, c)) === -1) {
+          ns.push(c);
+        }
+      }
+      return [...prev, ...ns];
+    });
+    setPartials((prev) => {
+      let ns: poker.Card[] = [...prev];
+
+      for (const c of newPartials) {
+        if (ns.findIndex((p) => poker.equalsCard(p, c)) === -1) {
+          ns.push(c);
+        }
+      }
+
+      return ns.filter(
+        (p) => newCorrects.findIndex((c) => poker.equalsCard(c, p)) === -1
+      );
+    });
 
     setTrials(count + 1);
     setColumn(0);
@@ -139,6 +168,8 @@ export const GameBoard: React.FC<Props> = ({
         </MobileMainBoard>
         <MobileInput
           absents={absents}
+          corrects={corrects}
+          partials={partials}
           handleSelect={handleSelect}
           handleEnter={handleEnter}
           handleBackspace={handleBackspace}
@@ -156,6 +187,8 @@ export const GameBoard: React.FC<Props> = ({
       </MainBoard>
       <Input
         absents={absents}
+        corrects={corrects}
+        partials={partials}
         handleSelect={handleSelect}
         handleEnter={handleEnter}
         handleBackspace={handleBackspace}

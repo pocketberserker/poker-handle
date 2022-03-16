@@ -11,6 +11,8 @@ type SuitPanelProps = {
   index: number;
   value: number;
   absents: poker.Card[];
+  corrects: poker.Card[];
+  partials: poker.Card[];
   handleSelect: (card: poker.Card) => void;
 };
 
@@ -19,6 +21,8 @@ const SuitPanel: React.FC<SuitPanelProps> = ({
   value,
   index,
   absents,
+  corrects,
+  partials,
   handleSelect,
 }) => (
   <div
@@ -38,6 +42,12 @@ const SuitPanel: React.FC<SuitPanelProps> = ({
               click={(c) => handleSelect(c)}
               disabled={
                 absents.findIndex((c) => poker.equalsCard(c, card)) !== -1
+              }
+              correct={
+                corrects.findIndex((c) => poker.equalsCard(c, card)) !== -1
+              }
+              partial={
+                partials.findIndex((c) => poker.equalsCard(c, card)) !== -1
               }
             />
           );
@@ -79,6 +89,8 @@ const ButtonPanelContainer = styled.div`
 
 type InputPanelProps = {
   absents: poker.Card[];
+  corrects: poker.Card[];
+  partials: poker.Card[];
   handleSelect: (card: poker.Card) => void;
   handleEnter: () => void;
   handleBackspace: () => void;
@@ -87,6 +99,8 @@ type InputPanelProps = {
 
 export const InputPanel: React.FC<InputPanelProps> = ({
   absents,
+  corrects,
+  partials,
   handleSelect,
   handleEnter,
   handleBackspace,
@@ -104,6 +118,8 @@ export const InputPanel: React.FC<InputPanelProps> = ({
         value={tab}
         index={0}
         absents={absents}
+        corrects={corrects}
+        partials={partials}
         handleSelect={handleSelect}
       />
       <SuitPanel
@@ -111,6 +127,8 @@ export const InputPanel: React.FC<InputPanelProps> = ({
         value={tab}
         index={1}
         absents={absents}
+        corrects={corrects}
+        partials={partials}
         handleSelect={handleSelect}
       />
       <SuitPanel
@@ -118,6 +136,8 @@ export const InputPanel: React.FC<InputPanelProps> = ({
         value={tab}
         index={2}
         absents={absents}
+        corrects={corrects}
+        partials={partials}
         handleSelect={handleSelect}
       />
       <SuitPanel
@@ -125,6 +145,8 @@ export const InputPanel: React.FC<InputPanelProps> = ({
         value={tab}
         index={3}
         absents={absents}
+        corrects={corrects}
+        partials={partials}
         handleSelect={handleSelect}
       />
       <ButtonPanel
