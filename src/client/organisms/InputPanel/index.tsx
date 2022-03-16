@@ -22,7 +22,14 @@ const SuitPanel: React.FC<SuitPanelProps> = ({ suit, value, index }) => (
       <Panel>
         {poker.ranks.map((rank) => {
           const card: poker.Card = { rank, suit };
-          return <InputCard key={poker.stringify(card)} card={card} />;
+          return (
+            <InputCard
+              key={poker.stringify(card)}
+              card={card}
+              width={40}
+              height={58}
+            />
+          );
         })}
       </Panel>
     )}

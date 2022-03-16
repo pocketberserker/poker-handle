@@ -14,7 +14,12 @@ export const Hands: React.FC<Props> = ({ name, cards, className }) => {
     <Area className={className}>
       <Name>{name}</Name>
       {cards.map((card) => (
-        <InputCard key={poker.stringify(card)} card={card} />
+        <InputCard
+          key={poker.stringify(card)}
+          card={card}
+          width={60}
+          height={88}
+        />
       ))}
     </Area>
   );

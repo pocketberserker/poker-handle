@@ -4,6 +4,8 @@ import * as poker from "../../../poker";
 
 type Props = {
   card: poker.Card;
+  width: number;
+  height: number;
   className?: string;
 };
 
@@ -49,17 +51,17 @@ const getCardImageUrl = (rank: poker.Rank, suit: poker.Suit): string => {
   return `images/cards/card_${s}_${n}.png`;
 };
 
-export const Card: React.FC<Props> = ({ card, className }) => {
+export const Card: React.FC<Props> = ({ card, width, height, className }) => {
   return (
     <div className={className}>
-      <Image
+      <CardImage
         src={getCardImageUrl(card.rank, card.suit)}
         alt={poker.stringify(card)}
+        width={width}
+        height={height}
       />
     </div>
   );
 };
 
-const Image = styled.img`
-  width: 100%;
-`;
+const CardImage = styled.img``;
