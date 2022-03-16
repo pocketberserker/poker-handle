@@ -22,7 +22,7 @@ export const SuitTabs: React.FC<Props> = ({ value, handleChange }) => {
       value={value}
       TabIndicatorProps={{
         style: {
-          backgroundColor: theme.palette.primary.contrastText,
+          backgroundColor: theme.wordle.partial,
         },
       }}
       onChange={(e, newValue) => handleChange(newValue)}
