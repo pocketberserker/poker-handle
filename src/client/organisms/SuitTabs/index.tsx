@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { Tab, Tabs } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 
 type Props = {
   value: number;
@@ -15,9 +16,15 @@ const a11yProps = (index: number) => {
 };
 
 export const SuitTabs: React.FC<Props> = ({ value, handleChange }) => {
+  const theme = useTheme();
   return (
     <Tabs
       value={value}
+      TabIndicatorProps={{
+        style: {
+          backgroundColor: theme.palette.primary.contrastText,
+        },
+      }}
       onChange={(e, newValue) => handleChange(newValue)}
       aria-label="tabs"
       centered
