@@ -1,24 +1,24 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { BoardCard } from "../BoardCard";
-import { InputState } from "../../state";
+import { Guess } from "../../guess";
 import * as poker from "../../../poker";
 
 type AnswerProps = {
   row: number;
-  cards: InputState[];
+  guesses: Guess[];
 };
 
-const Answer: React.FC<AnswerProps> = ({ cards, row }) => (
+const Answer: React.FC<AnswerProps> = ({ guesses, row }) => (
   <AnswerItems>
-    {cards.map((state, i) => (
+    {guesses.map((guess, i) => (
       <BoardCard
         key={
-          state.kind === "blank"
+          guess.kind === "blank"
             ? `blank-${row}-${i}`
-            : poker.stringify(state.card)
+            : poker.stringify(guess.card)
         }
-        state={state}
+        guess={guess}
       />
     ))}
   </AnswerItems>
@@ -31,22 +31,22 @@ const AnswerItems = styled.div`
 `;
 
 type BoardProps = {
-  inputs: InputState[][];
+  guesses: Guess[][];
 };
 
-export const Board: React.FC<BoardProps> = ({ inputs }) => {
+export const Board: React.FC<BoardProps> = ({ guesses }) => {
   return (
     <Container>
-      {inputs.map((input, i) => {
-        const key = input
-          .map((state) =>
-            state.kind === "blank" ? "" : poker.stringify(state.card)
+      {guesses.map((row, i) => {
+        const key = row
+          .map((guess) =>
+            guess.kind === "blank" ? "" : poker.stringify(guess.card)
           )
           .join(" ");
         return (
           <Answer
             key={key === "    " ? `blank-${i}` : key}
-            cards={input}
+            guesses={row}
             row={i}
           />
         );

@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { useMobile } from "../../hooks/MediaQuery";
 import { Hands } from "../Hands";
 import { Board } from "../../molecules/Board";
-import { InputState } from "../../state";
+import { Guess } from "../../guess";
 import { InputPanel } from "../../organisms/InputPanel";
 import { Board as BoardModel } from "../../generator";
 import * as poker from "../../../poker";
@@ -11,7 +11,7 @@ import { maxTrials } from "../../constants/meta";
 
 type Props = {
   board: BoardModel;
-  init: InputState[][];
+  init: Guess[][];
   alreadyAnswered: boolean;
 };
 
@@ -21,7 +21,7 @@ export const GameBoard: React.FC<Props> = ({
   alreadyAnswered,
 }) => {
   const { isMobile } = useMobile();
-  const [inputs, setInputs] = useState(init);
+  const [guesses, setGuesses] = useState(init);
   const [trials, setTrials] = useState(alreadyAnswered ? maxTrials + 1 : 1);
   const [column, setColumn] = useState(
     alreadyAnswered ? init[init.length].length : 0
@@ -34,7 +34,7 @@ export const GameBoard: React.FC<Props> = ({
     }
 
     const row = trials - 1;
-    const current = inputs[row];
+    const current = guesses[row];
 
     if (column >= current.length) {
       return;
@@ -54,9 +54,9 @@ export const GameBoard: React.FC<Props> = ({
       card,
     };
 
-    const next = [...inputs];
+    const next = [...guesses];
     next[row] = newRow;
-    setInputs(next);
+    setGuesses(next);
 
     setColumn(column + 1);
   };
@@ -67,24 +67,24 @@ export const GameBoard: React.FC<Props> = ({
     }
 
     const row = trials - 1;
-    const current = inputs[row];
+    const current = guesses[row];
 
     const newRow = [...current];
     newRow[column > 0 ? column - 1 : 0] = {
       kind: "blank",
     };
 
-    const next = [...inputs];
+    const next = [...guesses];
     next[row] = newRow;
-    setInputs(next);
+    setGuesses(next);
 
     setColumn(column - 1);
   };
 
   const checkAnswer = async (current: number, count: number) => {
-    const newRow: InputState[] = [];
+    const newRow: Guess[] = [];
 
-    for (const [i, s] of inputs[current].entries()) {
+    for (const [i, s] of guesses[current].entries()) {
       // TODO: show error message
       if (s.kind !== "entered") {
         return;
@@ -103,9 +103,9 @@ export const GameBoard: React.FC<Props> = ({
       });
     }
 
-    const next = [...inputs];
+    const next = [...guesses];
     next[current] = newRow;
-    setInputs(next);
+    setGuesses(next);
 
     setTrials(count + 1);
     setColumn(0);
@@ -129,7 +129,7 @@ export const GameBoard: React.FC<Props> = ({
       <>
         <MobileMainBoard>
           <Hands name="you" cards={board.player} />
-          <Board inputs={inputs} />
+          <Board guesses={guesses} />
           <Hands name="other" cards={board.opponent} />
         </MobileMainBoard>
         <MobileInput
@@ -146,7 +146,7 @@ export const GameBoard: React.FC<Props> = ({
     <>
       <MainBoard>
         <Hands name="you" cards={board.player} />
-        <Board inputs={inputs} />
+        <Board guesses={guesses} />
         <Hands name="other" cards={board.opponent} />
       </MainBoard>
       <Input

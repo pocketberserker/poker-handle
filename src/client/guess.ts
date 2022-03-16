@@ -1,6 +1,6 @@
 import { Card } from "../poker";
 
-export type InputState = Blank | Entered | PartialMatch | Absent | Correct;
+export type Guess = Blank | Entered | PartialMatch | Absent | Correct;
 
 export type Blank = {
   kind: "blank";

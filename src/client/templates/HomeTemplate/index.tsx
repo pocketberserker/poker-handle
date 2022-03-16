@@ -1,12 +1,12 @@
 import React from "react";
 import { TemplateLayout as Layout } from "../../organisms/TemplateLayout";
-import { InputState } from "../../state";
+import { Guess } from "../../guess";
 import { GameBoard } from "../../organisms/GameBoard";
 import { Board } from "../../generator";
 
 type Props = {
   board: Board;
-  init: InputState[][];
+  init: Guess[][];
   alreadyAnswered: boolean;
 };
 
