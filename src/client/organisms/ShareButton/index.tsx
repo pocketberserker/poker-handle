@@ -30,7 +30,7 @@ export const ShareButton: React.FC<Props> = ({ guesses, className }) => {
     const count = guesses.findIndex((row) =>
       row.every((guess) => guess.kind === "correct")
     );
-    const guessCount = count === -1 ? "X" : count;
+    const guessCount = count === -1 ? "X" : count + 1;
 
     const title = `#Poker_Handle ${guessCount}/6`;
     const guessString = guesses
