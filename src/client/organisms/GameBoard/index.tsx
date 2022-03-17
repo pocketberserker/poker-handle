@@ -15,6 +15,26 @@ type Props = {
   alreadyAnswered: boolean;
 };
 
+const pickCardsFromGuesses = (
+  guesses: Guess[][],
+  kind: "correct" | "partial"
+): poker.Card[] => {
+  const corrects: poker.Card[] = [];
+
+  for (const row of guesses) {
+    for (const guess of row) {
+      if (guess.kind !== kind) {
+        continue;
+      }
+      if (corrects.findIndex((c) => poker.equalsCard(c, guess.card)) === -1) {
+        corrects.push(guess.card);
+      }
+    }
+  }
+
+  return corrects;
+};
+
 export const GameBoard: React.FC<Props> = ({
   board,
   init,
@@ -27,8 +47,12 @@ export const GameBoard: React.FC<Props> = ({
     alreadyAnswered ? init[init.length].length : 0
   );
   const [absents, setAbsents] = useState([...board.player, ...board.opponent]);
-  const [corrects, setCorrects] = useState<poker.Card[]>([]);
-  const [partials, setPartials] = useState<poker.Card[]>([]);
+  const [corrects, setCorrects] = useState<poker.Card[]>(
+    pickCardsFromGuesses(init, "correct")
+  );
+  const [partials, setPartials] = useState<poker.Card[]>(
+    pickCardsFromGuesses(init, "partial")
+  );
   const [checking, setChecking] = useState(false);
 
   const handleSelect = (card: poker.Card) => {
