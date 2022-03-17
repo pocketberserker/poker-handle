@@ -24,7 +24,7 @@ const alreadyAnswered = (guesses: Guess[][]): boolean => {
 const Home: NextPage = () => {
   const router = useRouter();
   const [guesses, setGuesses] = useState(genGuesses());
-  const [board, setBoard] = useState(poker.generate(nowString()));
+  const [board, setBoard] = useState<poker.Board | null>(null);
 
   const play = () => {
     const next =
@@ -38,6 +38,10 @@ const Home: NextPage = () => {
       play();
     }
   }, [router.isReady]);
+
+  if (!board) {
+    return null;
+  }
 
   return (
     <HomeTemplate
