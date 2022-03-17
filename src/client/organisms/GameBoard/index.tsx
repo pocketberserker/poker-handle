@@ -63,7 +63,7 @@ export const GameBoard: React.FC<Props> = ({
     pickCardsFromGuesses(init, "partial")
   );
   const [finished, setFinished] = useState(
-    corrects.length === guesses[0].length
+    corrects.length === guesses[0].length || trials > maxTrials
   );
 
   const [checking, setChecking] = useState(false);
