@@ -43,6 +43,7 @@ const Button = styled.div`
   height: ${height}px;
   margin: 5px 2px;
   position: relative;
+  cursor: pointer;
 `;
 
 const Overlay = styled.div`
