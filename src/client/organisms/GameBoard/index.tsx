@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { useMobile } from "../../hooks/MediaQuery";
 import { useMessage } from "../../hooks/MessageSnackbar";
+import { useCorrectAnswer } from "../../hooks/CorrectAnswerSnackbar";
 import { Hands } from "../Hands";
 import { Board } from "../../molecules/Board";
 import { Guess } from "../../guess";
@@ -43,6 +44,7 @@ export const GameBoard: React.FC<Props> = ({
 }) => {
   const { isMobile } = useMobile();
   const { showMessage } = useMessage();
+  const { showCorrectAnswer } = useCorrectAnswer();
   const [guesses, setGuesses] = useState(init);
   const [trials, setTrials] = useState(alreadyAnswered ? maxTrials + 1 : 1);
   const [column, setColumn] = useState(
@@ -176,7 +178,7 @@ export const GameBoard: React.FC<Props> = ({
     setColumn(0);
 
     if (count >= maxTrials) {
-      showMessage(board.common.map((c) => poker.stringify(c)).join(" "));
+      showCorrectAnswer(board.common);
     }
 
     // TODO: move to after animations
