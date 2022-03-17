@@ -5,6 +5,7 @@ import React from "react";
 import "sanitize.css";
 
 import { appName } from "../src/client/constants/meta";
+import { MessageSnackbarProvider } from "../src/client/hooks/MessageSnackbar";
 import { ThemeProvider } from "../src/client/providers/ThemeProvider";
 
 const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
@@ -18,7 +19,9 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
         />
       </Head>
       <ThemeProvider>
-        <Component {...pageProps} />
+        <MessageSnackbarProvider>
+          <Component {...pageProps} />
+        </MessageSnackbarProvider>
       </ThemeProvider>
     </>
   );

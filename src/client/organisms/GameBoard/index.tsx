@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { useMobile } from "../../hooks/MediaQuery";
+import { useMessage } from "../../hooks/MessageSnackbar";
 import { Hands } from "../Hands";
 import { Board } from "../../molecules/Board";
 import { Guess } from "../../guess";
@@ -41,6 +42,7 @@ export const GameBoard: React.FC<Props> = ({
   alreadyAnswered,
 }) => {
   const { isMobile } = useMobile();
+  const { showMessage } = useMessage();
   const [guesses, setGuesses] = useState(init);
   const [trials, setTrials] = useState(alreadyAnswered ? maxTrials + 1 : 1);
   const [column, setColumn] = useState(
@@ -71,7 +73,7 @@ export const GameBoard: React.FC<Props> = ({
         (s) => s.kind === "entered" && poker.equalsCard(s.card, card)
       )
     ) {
-      // TODO: show duplicate card warning message
+      showMessage("Duplicate card");
       return;
     }
 
@@ -115,8 +117,13 @@ export const GameBoard: React.FC<Props> = ({
     const newPartials: poker.Card[] = [];
 
     for (const [i, s] of guesses[current].entries()) {
-      // TODO: show error message
-      if (s.kind !== "entered") {
+      if (s.kind === "blank") {
+        showMessage("Not enough cards");
+        setChecking(false);
+        return;
+      } else if (s.kind !== "entered") {
+        showMessage("Already checked (bug?)");
+        setChecking(false);
         return;
       }
 
@@ -167,6 +174,10 @@ export const GameBoard: React.FC<Props> = ({
 
     setTrials(count + 1);
     setColumn(0);
+
+    if (count >= maxTrials) {
+      showMessage(board.common.map((c) => poker.stringify(c)).join(" "));
+    }
 
     // TODO: move to after animations
     setChecking(false);
