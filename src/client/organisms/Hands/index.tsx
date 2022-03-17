@@ -6,7 +6,7 @@ import { Hand } from "../../molecules/Hand";
 type Props = {
   name: string;
   cards: poker.Card[];
-  category: poker.Category;
+  category?: poker.Category;
   className?: string;
 };
 
@@ -22,7 +22,7 @@ export const Hands: React.FC<Props> = ({
       {cards.map((card) => (
         <Hand key={poker.stringify(card)} card={card} />
       ))}
-      <Category>{category}</Category>
+      <Category>{category ?? "?"}</Category>
     </Area>
   );
 };

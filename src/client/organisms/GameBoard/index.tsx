@@ -259,7 +259,7 @@ export const GameBoard: React.FC<Props> = ({
     return (
       <>
         <MobileMainBoard>
-          <Hands name="you" cards={board.player} category={"Three of a Kind"} />
+          <Hands name="you" cards={board.player} />
           <Board guesses={guesses} />
           <Hands
             name="other"
@@ -289,7 +289,7 @@ export const GameBoard: React.FC<Props> = ({
   return (
     <>
       <MainBoard>
-        <Hands name="you" cards={board.player} category={playerCategory} />
+        <Hands name="you" cards={board.player} />
         <Board guesses={guesses} />
         <Hands
           name="other"
