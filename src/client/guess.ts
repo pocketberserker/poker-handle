@@ -1,6 +1,6 @@
 import { Card } from "../poker";
 
-export type Guess = Blank | Entered | PartialMatch | Absent | Correct;
+export type Guess = Blank | Entered | Partial | PartialRank | Absent | Correct;
 
 export type Blank = {
   kind: "blank";
@@ -11,8 +11,13 @@ export type Entered = {
   card: Card;
 };
 
-export type PartialMatch = {
-  kind: "partial-match";
+export type Partial = {
+  kind: "partial";
+  card: Card;
+};
+
+export type PartialRank = {
+  kind: "partial-rank";
   card: Card;
 };
 

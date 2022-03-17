@@ -13,8 +13,10 @@ type Props = {
 const guessToSquare = (guess: Guess, light: boolean): string => {
   if (guess.kind === "correct") {
     return "🟩";
-  } else if (guess.kind === "partial-match") {
+  } else if (guess.kind === "partial") {
     return "🟨";
+  } else if (guess.kind === "partial-rank") {
+    return "🟦";
   } else {
     return "light" ? "⬜" : "⬛";
   }

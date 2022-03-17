@@ -8,6 +8,7 @@ type Props = {
   disabled: boolean;
   correct?: boolean;
   partial?: boolean;
+  partialRank?: boolean;
   click: (card: poker.Card) => void;
 };
 
@@ -19,6 +20,7 @@ export const CardButton: React.FC<Props> = ({
   disabled,
   correct,
   partial,
+  partialRank,
   click,
 }) => {
   return (
@@ -33,6 +35,7 @@ export const CardButton: React.FC<Props> = ({
       {disabled && <Disabled />}
       {correct && <Correct />}
       {partial && <Partial />}
+      {partialRank && <PartialRank />}
       <StyledCard card={card} width={width} height={height} />
     </Button>
   );
@@ -66,6 +69,10 @@ const Correct = styled(Overlay)`
 
 const Partial = styled(Overlay)`
   background-color: ${({ theme }) => theme.wordle.partial};
+`;
+
+const PartialRank = styled(Overlay)`
+  background-color: ${({ theme }) => theme.extras.guess.rank};
 `;
 
 const StyledCard = styled(Card)`

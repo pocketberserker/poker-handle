@@ -21,7 +21,7 @@ type Props = {
 
 const pickCardsFromGuesses = (
   guesses: Guess[][],
-  kind: "correct" | "partial"
+  kind: "correct" | "partial" | "partial-rank"
 ): poker.Card[] => {
   const corrects: poker.Card[] = [];
 
@@ -39,10 +39,16 @@ const pickCardsFromGuesses = (
   return corrects;
 };
 
-const checkCorrect = (common: poker.Card[], target: poker.Card, index: number): boolean => {
+const checkCorrect = (
+  common: poker.Card[],
+  target: poker.Card,
+  index: number
+): boolean => {
   // The flop cards are treated as correct if it is included flop range.
   if (index < 3) {
-    return common.slice(0, 3).findIndex((c) => poker.equalsCard(c, target)) !== -1;
+    return (
+      common.slice(0, 3).findIndex((c) => poker.equalsCard(c, target)) !== -1
+    );
   }
   return poker.equalsCard(target, common[index]);
 };
@@ -69,6 +75,9 @@ export const GameBoard: React.FC<Props> = ({
   );
   const [partials, setPartials] = useState<poker.Card[]>(
     pickCardsFromGuesses(init, "partial")
+  );
+  const [partialRanks, setPartialRanks] = useState<poker.Card[]>(
+    pickCardsFromGuesses(init, "partial-rank")
   );
   const [finished, setFinished] = useState(
     corrects.length === guesses[0].length || trials > maxTrials
@@ -145,6 +154,7 @@ export const GameBoard: React.FC<Props> = ({
     const newAbsents: poker.Card[] = [];
     const newCorrects: poker.Card[] = [];
     const newPartials: poker.Card[] = [];
+    const newPartialRanks: poker.Card[] = [];
 
     for (const [i, s] of guesses[current].entries()) {
       if (s.kind === "blank") {
@@ -157,13 +167,16 @@ export const GameBoard: React.FC<Props> = ({
         return;
       }
 
-      let kind: "correct" | "absent" | "partial-match" = "absent";
+      let kind: "correct" | "absent" | "partial" | "partial-rank" = "absent";
       if (checkCorrect(board.common, s.card, i)) {
         kind = "correct";
         newCorrects.push(s.card);
       } else if (board.common.find((c) => poker.equalsCard(c, s.card))) {
-        kind = "partial-match";
+        kind = "partial";
         newPartials.push(s.card);
+      } else if (board.common.find((c) => c.rank === s.card.rank)) {
+        kind = "partial-rank";
+        newPartialRanks.push(s.card);
       } else {
         newAbsents.push(s.card);
       }
@@ -201,6 +214,7 @@ export const GameBoard: React.FC<Props> = ({
         (p) => newCorrects.findIndex((c) => poker.equalsCard(c, p)) === -1
       );
     });
+    setPartialRanks(newPartialRanks);
 
     setTrials(count + 1);
     setColumn(0);
@@ -257,6 +271,7 @@ export const GameBoard: React.FC<Props> = ({
           absents={absents}
           corrects={corrects}
           partials={partials}
+          partialRanks={partialRanks}
           handleSelect={handleSelect}
           handleEnter={handleEnter}
           handleBackspace={handleBackspace}
@@ -286,6 +301,7 @@ export const GameBoard: React.FC<Props> = ({
         absents={absents}
         corrects={corrects}
         partials={partials}
+        partialRanks={partialRanks}
         handleSelect={handleSelect}
         handleEnter={handleEnter}
         handleBackspace={handleBackspace}

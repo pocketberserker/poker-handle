@@ -21,8 +21,10 @@ export const BoardCard: React.FC<Props> = ({ guess }) => {
 
     if (guess.kind === "absent") {
       confirmed = theme.wordle.absent;
-    } else if (guess.kind === "partial-match") {
+    } else if (guess.kind === "partial") {
       confirmed = theme.wordle.partial;
+    } else if (guess.kind === "partial-rank") {
+      confirmed = theme.extras.guess.rank;
     } else if (guess.kind === "correct") {
       confirmed = theme.wordle.correct;
     }

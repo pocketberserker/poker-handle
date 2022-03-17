@@ -13,6 +13,7 @@ type SuitPanelProps = {
   absents: poker.Card[];
   corrects: poker.Card[];
   partials: poker.Card[];
+  partialRanks: poker.Card[];
   handleSelect: (card: poker.Card) => void;
 };
 
@@ -23,6 +24,7 @@ const SuitPanel: React.FC<SuitPanelProps> = ({
   absents,
   corrects,
   partials,
+  partialRanks,
   handleSelect,
 }) => (
   <div
@@ -48,6 +50,9 @@ const SuitPanel: React.FC<SuitPanelProps> = ({
               }
               partial={
                 partials.findIndex((c) => poker.equalsCard(c, card)) !== -1
+              }
+              partialRank={
+                partialRanks.findIndex((c) => poker.equalsCard(c, card)) !== -1
               }
             />
           );
@@ -91,6 +96,7 @@ type InputPanelProps = {
   absents: poker.Card[];
   corrects: poker.Card[];
   partials: poker.Card[];
+  partialRanks: poker.Card[];
   handleSelect: (card: poker.Card) => void;
   handleEnter: () => void;
   handleBackspace: () => void;
@@ -101,6 +107,7 @@ export const InputPanel: React.FC<InputPanelProps> = ({
   absents,
   corrects,
   partials,
+  partialRanks,
   handleSelect,
   handleEnter,
   handleBackspace,
@@ -120,6 +127,7 @@ export const InputPanel: React.FC<InputPanelProps> = ({
         absents={absents}
         corrects={corrects}
         partials={partials}
+        partialRanks={partialRanks}
         handleSelect={handleSelect}
       />
       <SuitPanel
@@ -129,6 +137,7 @@ export const InputPanel: React.FC<InputPanelProps> = ({
         absents={absents}
         corrects={corrects}
         partials={partials}
+        partialRanks={partialRanks}
         handleSelect={handleSelect}
       />
       <SuitPanel
@@ -138,6 +147,7 @@ export const InputPanel: React.FC<InputPanelProps> = ({
         absents={absents}
         corrects={corrects}
         partials={partials}
+        partialRanks={partialRanks}
         handleSelect={handleSelect}
       />
       <SuitPanel
@@ -147,6 +157,7 @@ export const InputPanel: React.FC<InputPanelProps> = ({
         absents={absents}
         corrects={corrects}
         partials={partials}
+        partialRanks={partialRanks}
         handleSelect={handleSelect}
       />
       <ButtonPanel

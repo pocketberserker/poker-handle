@@ -27,4 +27,7 @@ export const wordle = {
 export const extras = {
   white: "#ffffff",
   black: "#000",
+  guess: {
+    rank: "#1976d2",
+  },
 };
