@@ -40,7 +40,7 @@ const Home: NextPage = () => {
   }, [router.isReady]);
 
   if (!board) {
-    return null;
+    return <div></div>;
   }
 
   return (
