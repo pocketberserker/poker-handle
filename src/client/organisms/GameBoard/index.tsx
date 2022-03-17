@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import styled from "@emotion/styled";
 import { useMobile } from "../../hooks/MediaQuery";
 import { useMessage } from "../../hooks/MessageSnackbar";
@@ -68,6 +68,16 @@ export const GameBoard: React.FC<Props> = ({
 
   const [checking, setChecking] = useState(false);
   const [openResultDialog, setOpenResultDialog] = useState(false);
+
+  const [playerCategory, opponentCategory] = useMemo(
+    () => [
+      poker.getRankCategory(poker.evaluate([...board.common, ...board.player])),
+      poker.getRankCategory(
+        poker.evaluate([...board.common, ...board.opponent])
+      ),
+    ],
+    [board]
+  );
 
   const handleSelect = (card: poker.Card) => {
     if (checking || finished || trials > maxTrials) {
@@ -227,9 +237,13 @@ export const GameBoard: React.FC<Props> = ({
     return (
       <>
         <MobileMainBoard>
-          <Hands name="you" cards={board.player} />
+          <Hands name="you" cards={board.player} category={"Three of a Kind"} />
           <Board guesses={guesses} />
-          <Hands name="other" cards={board.opponent} />
+          <Hands
+            name="other"
+            cards={board.opponent}
+            category={opponentCategory}
+          />
         </MobileMainBoard>
         <MobileInput
           absents={absents}
@@ -252,9 +266,13 @@ export const GameBoard: React.FC<Props> = ({
   return (
     <>
       <MainBoard>
-        <Hands name="you" cards={board.player} />
+        <Hands name="you" cards={board.player} category={playerCategory} />
         <Board guesses={guesses} />
-        <Hands name="other" cards={board.opponent} />
+        <Hands
+          name="other"
+          cards={board.opponent}
+          category={opponentCategory}
+        />
       </MainBoard>
       <Input
         absents={absents}
