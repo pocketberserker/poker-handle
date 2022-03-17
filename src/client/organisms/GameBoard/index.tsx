@@ -39,6 +39,14 @@ const pickCardsFromGuesses = (
   return corrects;
 };
 
+const checkCorrect = (common: poker.Card[], target: poker.Card, index: number): boolean => {
+  // The flop cards are treated as correct if it is included flop range.
+  if (index < 3) {
+    return common.slice(0, 3).findIndex((c) => poker.equalsCard(c, target)) !== -1;
+  }
+  return poker.equalsCard(target, common[index]);
+};
+
 export const GameBoard: React.FC<Props> = ({
   board,
   init,
@@ -150,7 +158,7 @@ export const GameBoard: React.FC<Props> = ({
       }
 
       let kind: "correct" | "absent" | "partial-match" = "absent";
-      if (poker.equalsCard(s.card, board.common[i])) {
+      if (checkCorrect(board.common, s.card, i)) {
         kind = "correct";
         newCorrects.push(s.card);
       } else if (board.common.find((c) => poker.equalsCard(c, s.card))) {
