@@ -224,7 +224,7 @@ export const GameBoard: React.FC<Props> = ({
       finish = true;
     } else if (count >= maxTrials) {
       finish = true;
-      showCorrectAnswer(board.common);
+      showCorrectAnswer(board.common, playerCategory, opponentCategory);
     }
 
     // TODO: move to after animations

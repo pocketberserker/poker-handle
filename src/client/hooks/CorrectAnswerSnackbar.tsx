@@ -1,12 +1,16 @@
 import React, { useState, createContext, useContext } from "react";
 import styled from "@emotion/styled";
-import { Snackbar } from "@mui/material";
+import { Snackbar, Typography } from "@mui/material";
 import { CloseButton } from "../molecules/CloseButton";
 import { Card } from "../molecules/Card";
 import * as poker from "../../poker";
 
 export const CorrectAnswerSnackbarContext = createContext<
-  (cards: poker.Card[]) => void
+  (
+    cards: poker.Card[],
+    player: poker.Category,
+    opponent: poker.Category
+  ) => void
 >(() => {});
 
 type Props = {
@@ -17,10 +21,18 @@ export const CorrectAnswerSnackbarProvider: React.FC<Props> = ({
   children,
 }) => {
   const [correct, setCorrect] = useState<poker.Card[]>([]);
+  const [player, setPlayer] = useState<poker.Category>("High Card");
+  const [opponent, setOpponent] = useState<poker.Category>("High Card");
   const [open, setOpen] = React.useState(false);
 
-  const handleOpen = (cards: poker.Card[]) => {
+  const handleOpen = (
+    cards: poker.Card[],
+    player: poker.Category,
+    opponent: poker.Category
+  ) => {
     setCorrect(cards);
+    setPlayer(player);
+    setOpponent(opponent);
     setOpen(true);
   };
 
@@ -44,14 +56,20 @@ export const CorrectAnswerSnackbarProvider: React.FC<Props> = ({
       >
         <AnswerContainer>
           <ResizedCloseButton click={handleClose} />
-          {correct.map((card) => (
-            <Card
-              key={poker.stringify(card)}
-              card={card}
-              width={60}
-              height={88}
-            />
-          ))}
+          <CardList>
+            {correct.map((card) => (
+              <Card
+                key={poker.stringify(card)}
+                card={card}
+                width={60}
+                height={88}
+              />
+            ))}
+          </CardList>
+          <Categories>
+            <Category variant="h5">{player}</Category>
+            <Category variant="h5">{opponent}</Category>
+          </Categories>
         </AnswerContainer>
       </Snackbar>
       {children}
@@ -63,8 +81,7 @@ const AnswerContainer = styled.div`
   min-width: 288px;
   padding: 30px 30px 20px 30px;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
   background: ${({ theme }) =>
     theme.palette.mode === "light" ? theme.extras.black : theme.extras.white};
   position: relative;
@@ -78,6 +95,25 @@ const ResizedCloseButton = styled(CloseButton)`
   top: 0;
   right: 5px;
   z-index: 1500;
+`;
+
+const CardList = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Categories = styled.div`
+  margin-top: 10px;
+  padding: 0 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const Category = styled(Typography)`
+  color: ${({ theme }) =>
+    theme.palette.mode === "light" ? theme.extras.white : theme.extras.black};
 `;
 
 export const useCorrectAnswer = () => {
