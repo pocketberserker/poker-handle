@@ -23,3 +23,8 @@ export const wordle = {
   absent: "#787c7e",
   border: "#d3d6da",
 };
+
+export const extras = {
+  white: "#ffffff",
+  black: "#000",
+};

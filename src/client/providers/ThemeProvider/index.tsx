@@ -5,7 +5,7 @@ import {
   StyledEngineProvider,
 } from "@mui/material/styles";
 import { ThemeProvider as EmotionThemeProvider } from "@emotion/react";
-import { getTheme, ColorMode, wordle } from "../../constants/theme";
+import { getTheme, ColorMode, wordle, extras } from "../../constants/theme";
 import { ThemeContext } from "../../hooks/Theme";
 import { GlobalStyles } from "../GlobalStyles";
 
@@ -39,6 +39,7 @@ export const ThemeProvider: React.FC<Props> = ({ children }) => {
           htmlFontSize: 10,
         },
         wordle,
+        extras,
       }),
     [mode]
   );

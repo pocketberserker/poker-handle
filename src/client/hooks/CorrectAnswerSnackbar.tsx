@@ -66,7 +66,7 @@ const AnswerContainer = styled.div`
   justify-content: center;
   align-items: center;
   background: ${({ theme }) =>
-    theme.palette.mode === "light" ? "#000" : "#ffffff"};
+    theme.palette.mode === "light" ? theme.extras.black : theme.extras.white};
   position: relative;
 `;
 
@@ -74,17 +74,10 @@ const ResizedCloseButton = styled(CloseButton)`
   min-width: 18px;
   width: 18px;
   height: 18px;
-  background: ${({ theme }) =>
-    theme.palette.mode === "light" ? "#ffffff" : "#000"};
   position: absolute;
   top: 0;
   right: 5px;
   z-index: 1500;
-
-  &:hover {
-    background: ${({ theme }) =>
-      theme.palette.mode === "light" ? "#ffffff" : "#000"};
-  }
 `;
 
 export const useCorrectAnswer = () => {

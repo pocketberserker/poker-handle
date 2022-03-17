@@ -54,14 +54,14 @@ const MessageContainer = styled.div`
   justify-content: center;
   align-items: center;
   background: ${({ theme }) =>
-    theme.palette.mode === "light" ? "#000" : "#ffffff"};
+    theme.palette.mode === "light" ? theme.extras.black : theme.extras.white};
 `;
 
 const Message = styled.span`
   font-size: 16px;
   font-weight: bold;
   color: ${({ theme }) =>
-    theme.palette.mode === "light" ? "#ffffff" : "#000"};
+    theme.palette.mode === "light" ? theme.extras.white : theme.extras.black};
 `;
 
 export const useMessage = () => {

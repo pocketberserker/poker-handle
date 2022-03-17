@@ -17,6 +17,13 @@ export const CloseButton: React.FC<Props> = ({ click, className }) => {
 };
 
 const CloseIcon = styled(Close)`
+  background: ${({ theme }) =>
+    theme.palette.mode === "light" ? theme.extras.white : theme.extras.black};
   color: ${({ theme }) =>
-    theme.palette.mode === "light" ? "#000" : "#ffffff"};
+    theme.palette.mode === "light" ? theme.extras.black : theme.extras.white};
+
+  &:hover {
+    background: ${({ theme }) =>
+      theme.palette.mode === "light" ? theme.extras.white : theme.extras.black};
+  }
 `;

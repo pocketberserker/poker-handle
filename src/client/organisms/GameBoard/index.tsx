@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import { useMobile } from "../../hooks/MediaQuery";
 import { useMessage } from "../../hooks/MessageSnackbar";
@@ -7,6 +7,7 @@ import { Hands } from "../Hands";
 import { Board } from "../../molecules/Board";
 import { Guess } from "../../guess";
 import { InputPanel } from "../../organisms/InputPanel";
+import { ResultDialog } from "../ResultDialog";
 import { Board as BoardModel } from "../../generator";
 import * as poker from "../../../poker";
 import { maxTrials } from "../../constants/meta";
@@ -15,6 +16,7 @@ type Props = {
   board: BoardModel;
   init: Guess[][];
   alreadyAnswered: boolean;
+  play: () => void;
 };
 
 const pickCardsFromGuesses = (
@@ -41,10 +43,13 @@ export const GameBoard: React.FC<Props> = ({
   board,
   init,
   alreadyAnswered,
+  play,
 }) => {
   const { isMobile } = useMobile();
+
   const { showMessage } = useMessage();
   const { showCorrectAnswer } = useCorrectAnswer();
+
   const [guesses, setGuesses] = useState(init);
   const [trials, setTrials] = useState(alreadyAnswered ? maxTrials + 1 : 1);
   const [column, setColumn] = useState(
@@ -57,10 +62,15 @@ export const GameBoard: React.FC<Props> = ({
   const [partials, setPartials] = useState<poker.Card[]>(
     pickCardsFromGuesses(init, "partial")
   );
+  const [finished, setFinished] = useState(
+    corrects.length === guesses[0].length
+  );
+
   const [checking, setChecking] = useState(false);
+  const [openResultDialog, setOpenResultDialog] = useState(false);
 
   const handleSelect = (card: poker.Card) => {
-    if (checking || trials > maxTrials) {
+    if (checking || finished || trials > maxTrials) {
       return;
     }
 
@@ -93,7 +103,7 @@ export const GameBoard: React.FC<Props> = ({
   };
 
   const handleBackspace = () => {
-    if (checking || column <= 0) {
+    if (checking || finished || column <= 0) {
       return;
     }
 
@@ -177,16 +187,24 @@ export const GameBoard: React.FC<Props> = ({
     setTrials(count + 1);
     setColumn(0);
 
-    if (count >= maxTrials) {
+    let finish = false;
+    if (newCorrects.length === guesses[current].length) {
+      finish = true;
+    } else if (count >= maxTrials) {
+      finish = true;
       showCorrectAnswer(board.common);
     }
 
     // TODO: move to after animations
+    if (finish) {
+      setOpenResultDialog(true);
+      setFinished(finish);
+    }
     setChecking(false);
   };
 
   const handleEnter = () => {
-    if (checking) {
+    if (checking || finished) {
       return;
     }
 
@@ -194,6 +212,16 @@ export const GameBoard: React.FC<Props> = ({
 
     checkAnswer(trials - 1, trials);
   };
+
+  const handleCloseResultDialog = () => {
+    setOpenResultDialog(false);
+  };
+
+  useEffect(() => {
+    if (finished) {
+      // TODO: animation
+    }
+  }, [finished]);
 
   if (isMobile) {
     return (
@@ -210,6 +238,12 @@ export const GameBoard: React.FC<Props> = ({
           handleSelect={handleSelect}
           handleEnter={handleEnter}
           handleBackspace={handleBackspace}
+        />
+        <ResultDialog
+          guesses={guesses}
+          open={openResultDialog}
+          close={handleCloseResultDialog}
+          play={play}
         />
       </>
     );
@@ -229,6 +263,12 @@ export const GameBoard: React.FC<Props> = ({
         handleSelect={handleSelect}
         handleEnter={handleEnter}
         handleBackspace={handleBackspace}
+      />
+      <ResultDialog
+        guesses={guesses}
+        open={openResultDialog}
+        close={handleCloseResultDialog}
+        play={play}
       />
     </>
   );
