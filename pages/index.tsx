@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 
 import { maxTrials } from "../src/client/constants/meta";
@@ -23,12 +24,17 @@ const alreadyAnswered = (guesses: Guess[][]): boolean => {
 };
 
 const Home: NextPage = () => {
+  const router = useRouter();
   const [guesses, setGuesses] = useState(genGuesses());
-  const [board, setBoard] = useState(genBoard(nowString()));
+  const [board, setBoard] = useState(
+    genBoard(router.query.seed ? (router.query.seed as string) : nowString())
+  );
 
   const play = () => {
     setGuesses(genGuesses());
-    setBoard(genBoard(nowString()));
+    setBoard(
+      genBoard(router.query.seed ? (router.query.seed as string) : nowString())
+    );
   };
 
   return (
