@@ -37,6 +37,7 @@ const Home: NextPage = () => {
     if (router.isReady) {
       play();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.isReady]);
 
   if (!board) {
