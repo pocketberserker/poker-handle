@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { maxTrials } from "../src/client/constants/meta";
 import * as poker from "../src/client/generator";
@@ -15,8 +15,6 @@ const nowString = (): string => {
   return `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
 };
 
-const genBoard = (seed: string): poker.Board => poker.generate(seed);
-
 const alreadyAnswered = (guesses: Guess[][]): boolean => {
   const last = guesses[guesses.length - 1];
   const lastKind = last[last.length - 1].kind;
@@ -26,16 +24,20 @@ const alreadyAnswered = (guesses: Guess[][]): boolean => {
 const Home: NextPage = () => {
   const router = useRouter();
   const [guesses, setGuesses] = useState(genGuesses());
-  const [board, setBoard] = useState(
-    genBoard(router.query.seed ? (router.query.seed as string) : nowString())
-  );
+  const [board, setBoard] = useState(poker.generate(nowString()));
 
   const play = () => {
+    const next =
+      typeof router.query.seed === "string" ? router.query.seed : nowString();
     setGuesses(genGuesses());
-    setBoard(
-      genBoard(router.query.seed ? (router.query.seed as string) : nowString())
-    );
+    setBoard(poker.generate(next));
   };
+
+  useEffect(() => {
+    if (router.isReady) {
+      play();
+    }
+  }, [router.isReady]);
 
   return (
     <HomeTemplate
