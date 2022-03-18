@@ -36,6 +36,13 @@ const tryGenerate = (arng: seedrandom.PRNG): Board | null => {
   const opponentRank = poker.evaluate([...common, ...opponent]);
   const opponentCategory = poker.getRankCategory(opponentRank);
 
+  if (
+    opponent[0].rank === opponent[1].rank &&
+    (opponentCategory === "One Pair" || opponentCategory === "Two Pair")
+  ) {
+    return null;
+  }
+
   let player: [poker.Card, poker.Card] | null = null;
   for (let i = 0; i < tryCount; i++) {
     try {
