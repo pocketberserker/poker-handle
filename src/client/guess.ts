@@ -86,11 +86,15 @@ export const matchTheAnswers = (
   const partialRanks: Card[] = [];
   for (const [index, card] of partialRankCandidates) {
     const correctCount = corrects.filter((c) => c.rank === card.rank).length;
+    const partialCount = partials.filter((c) => c.rank === card.rank).length;
     const inputCount = input.filter(
       (s) => s.kind === "entered" && s.card.rank === card.rank
     ).length;
     const commonCount = common.filter((c) => c.rank === card.rank).length;
-    if (correctCount === 0 || inputCount <= commonCount) {
+    if (
+      (correctCount === 0 || inputCount <= commonCount) &&
+      partialCount === 0
+    ) {
       partialRanks.push(card);
       guesses[index] = {
         kind: "partial-rank",

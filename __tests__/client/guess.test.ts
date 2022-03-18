@@ -149,6 +149,76 @@ describe("Answers", () => {
       },
     ],
     [
+      "8H QC 5H 5C TC", // 5 -> partial 1, partial-rank 1
+      "8H QC TC 7S 5C", // 5 -> 1
+      {
+        guesses: [
+          {
+            card: {
+              rank: "8",
+              suit: "H",
+            },
+            kind: "correct",
+          },
+          {
+            card: {
+              rank: "Q",
+              suit: "C",
+            },
+            kind: "correct",
+          },
+          {
+            card: {
+              rank: "5",
+              suit: "H",
+            },
+            kind: "absent",
+          },
+          {
+            card: {
+              rank: "5",
+              suit: "C",
+            },
+            kind: "partial",
+          },
+          {
+            card: {
+              rank: "T",
+              suit: "C",
+            },
+            kind: "partial",
+          },
+        ] as Guess[],
+        absents: [
+          {
+            rank: "5",
+            suit: "H",
+          },
+        ] as Card[],
+        corrects: [
+          {
+            rank: "8",
+            suit: "H",
+          },
+          {
+            rank: "Q",
+            suit: "C",
+          },
+        ] as Card[],
+        partialRanks: [],
+        partials: [
+          {
+            rank: "5",
+            suit: "C",
+          },
+          {
+            rank: "T",
+            suit: "C",
+          },
+        ] as Card[],
+      },
+    ],
+    [
       "8H QC 8D AS 8C", // 8 -> 3
       "8H QC TC 8S 8C", // 8 -> 3
       {
