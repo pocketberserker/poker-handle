@@ -1,4 +1,4 @@
-import { Card, equalsCard } from "../poker";
+import { Card, equalsCard, suits } from "../poker";
 
 export type Guess = Blank | Entered | Partial | PartialRank | Absent | Correct;
 
@@ -121,22 +121,51 @@ export type Diff = {
   absents: Card[];
 };
 
-export const collectDiff = (prev: Diff, current: Answers): Diff => {
+export const collectDiff = (
+  prev: Diff,
+  current: Answers,
+  hands: Card[]
+): Diff => {
   const corrects = [
     ...prev.corrects,
     ...current.corrects.filter(
       (c) => prev.corrects.findIndex((p) => equalsCard(p, c)) === -1
     ),
   ];
+  const partials = [
+    ...prev.partials,
+    ...current.partials.filter(
+      (c) => prev.partials.findIndex((p) => equalsCard(p, c)) === -1
+    ),
+  ].filter((p) => corrects.findIndex((c) => equalsCard(c, p)) === -1);
+
+  const absents: Card[] = [];
+  for (const card of [
+    ...prev.absents.filter(
+      (a) => hands.findIndex((h) => equalsCard(h, a)) === -1
+    ),
+    ...current.absents,
+  ]) {
+    absents.push(
+      ...suits
+        .map((suit) => ({
+          rank: card.rank,
+          suit,
+        }))
+        .filter(
+          (c) =>
+            equalsCard(c, card) === false &&
+            corrects.findIndex((o) => equalsCard(o, c)) === -1 &&
+            partials.findIndex((p) => equalsCard(p, c)) === -1 &&
+            current.partialRanks.findIndex((p) => equalsCard(p, c)) === -1
+        )
+    );
+  }
+
   return {
-    absents: [...prev.absents, ...current.absents],
+    absents: [...prev.absents, ...current.absents, ...absents],
     corrects,
-    partials: [
-      ...prev.partials,
-      ...current.corrects.filter(
-        (c) => prev.partials.findIndex((p) => equalsCard(p, c)) === -1
-      ),
-    ].filter((p) => corrects.findIndex((c) => equalsCard(c, p)) === -1),
+    partials,
     partialRanks: current.partialRanks,
   };
 };

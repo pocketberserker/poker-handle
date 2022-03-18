@@ -143,7 +143,9 @@ export const GameBoard: React.FC<Props> = ({
     next[current] = answers.guesses;
     setGuesses(next);
 
-    setDiff((prev) => collectDiff(prev, answers));
+    setDiff((prev) =>
+      collectDiff(prev, answers, [...board.player, ...board.opponent])
+    );
 
     setTrials(count + 1);
     setColumn(0);

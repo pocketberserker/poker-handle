@@ -360,7 +360,7 @@ describe("Answers", () => {
     ],
   ])(
     "match the answers: %s, %s",
-    async (input: string, common: string, expected: Answers) => {
+    (input: string, common: string, expected: Answers) => {
       expect(
         matchTheAnswers(
           input.split(" ").map((c) => ({ kind: "entered", card: parse(c) })),
@@ -374,20 +374,28 @@ describe("Answers", () => {
 describe("Diff", () => {
   test.each([
     [
-      "8H QC TC 5S 5C",
-      "8H QC TC 8S 5C",
+      "AH QC TC 7S 5C",
+      "8H QC TC 7S 5C",
       {
         absents: [
           {
-            rank: "5",
+            rank: "A",
+            suit: "H",
+          },
+          {
+            rank: "A",
+            suit: "C",
+          },
+          {
+            rank: "A",
+            suit: "D",
+          },
+          {
+            rank: "A",
             suit: "S",
           },
         ] as Card[],
         corrects: [
-          {
-            rank: "8",
-            suit: "H",
-          },
           {
             rank: "Q",
             suit: "C",
@@ -395,6 +403,10 @@ describe("Diff", () => {
           {
             rank: "T",
             suit: "C",
+          },
+          {
+            rank: "7",
+            suit: "S",
           },
           {
             rank: "5",
@@ -405,23 +417,168 @@ describe("Diff", () => {
         partials: [],
       },
     ],
-  ])(
-    "correct: %s, %s",
-    async (input: string, common: string, expected: Diff) => {
-      expect(
-        collectDiff(
+    [
+      "2C 3C 4C 5C 6C",
+      "8H QC TC 8S 5C",
+      {
+        absents: [
           {
-            absents: [],
-            corrects: [],
-            partialRanks: [],
-            partials: [],
+            rank: "2",
+            suit: "C",
           },
-          matchTheAnswers(
-            input.split(" ").map((c) => ({ kind: "entered", card: parse(c) })),
-            common.split(" ").map((c) => parse(c))
-          ) as Answers
-        )
-      ).toEqual(expected);
-    }
-  );
+          {
+            rank: "3",
+            suit: "C",
+          },
+          {
+            rank: "4",
+            suit: "C",
+          },
+          {
+            rank: "6",
+            suit: "C",
+          },
+          {
+            rank: "2",
+            suit: "D",
+          },
+          {
+            rank: "2",
+            suit: "H",
+          },
+          {
+            rank: "2",
+            suit: "S",
+          },
+          {
+            rank: "3",
+            suit: "D",
+          },
+          {
+            rank: "3",
+            suit: "H",
+          },
+          {
+            rank: "3",
+            suit: "S",
+          },
+          {
+            rank: "4",
+            suit: "D",
+          },
+          {
+            rank: "4",
+            suit: "H",
+          },
+          {
+            rank: "4",
+            suit: "S",
+          },
+          {
+            rank: "6",
+            suit: "D",
+          },
+          {
+            rank: "6",
+            suit: "H",
+          },
+          {
+            rank: "6",
+            suit: "S",
+          },
+        ] as Card[],
+        corrects: [] as Card[],
+        partialRanks: [],
+        partials: [
+          {
+            rank: "5",
+            suit: "C",
+          },
+        ] as Card[],
+      },
+    ],
+  ])("correct: %s, %s", (input: string, common: string, expected: Diff) => {
+    expect(
+      collectDiff(
+        {
+          absents: [],
+          corrects: [],
+          partialRanks: [],
+          partials: [],
+        },
+        matchTheAnswers(
+          input.split(" ").map((c) => ({ kind: "entered", card: parse(c) })),
+          common.split(" ").map((c) => parse(c))
+        ) as Answers,
+        [].map((c) => parse(c))
+      )
+    ).toEqual(expected);
+  });
+
+  it("hand card ranks are not applicable to add absent", () => {
+    expect(
+      collectDiff(
+        {
+          absents: ["8C", "9C"].map((c) => parse(c)),
+          corrects: [],
+          partialRanks: [],
+          partials: [],
+        },
+        matchTheAnswers(
+          "2C 3C 4C 5C 6C"
+            .split(" ")
+            .map((c) => ({ kind: "entered", card: parse(c) })),
+          "2C 3C 4C 5C 7C".split(" ").map((c) => parse(c))
+        ) as Answers,
+        ["8C", "9C"].map((c) => parse(c))
+      )
+    ).toEqual({
+      absents: [
+        {
+          rank: "8",
+          suit: "C",
+        },
+        {
+          rank: "9",
+          suit: "C",
+        },
+        {
+          rank: "6",
+          suit: "C",
+        },
+        {
+          rank: "6",
+          suit: "D",
+        },
+        {
+          rank: "6",
+          suit: "H",
+        },
+        {
+          rank: "6",
+          suit: "S",
+        },
+      ],
+      corrects: [
+        {
+          rank: "2",
+          suit: "C",
+        },
+        {
+          rank: "3",
+          suit: "C",
+        },
+        {
+          rank: "4",
+          suit: "C",
+        },
+        {
+          rank: "5",
+          suit: "C",
+        },
+      ],
+      partials: [],
+      partialRanks: [],
+    });
+  });
 });
