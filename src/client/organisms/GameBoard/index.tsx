@@ -148,20 +148,13 @@ export const GameBoard: React.FC<Props> = ({
     setTrials(count + 1);
     setColumn(0);
 
-    let finish = false;
-    if (answers.corrects.length === guesses[current].length) {
-      finish = true;
-    } else if (count >= maxTrials) {
-      finish = true;
-      showCorrectAnswer(board.common, playerCategory, opponentCategory);
-    }
+    let finish =
+      answers.corrects.length === guesses[current].length || count >= maxTrials;
+    setFinished(finish);
 
-    // TODO: move to after animations
-    if (finish) {
-      setOpenResultDialog(true);
-      setFinished(finish);
+    if (finish === false) {
+      setChecking(false);
     }
-    setChecking(false);
   };
 
   const handleEnter = () => {
@@ -181,6 +174,11 @@ export const GameBoard: React.FC<Props> = ({
   useEffect(() => {
     if (finished) {
       // TODO: animation
+      if (trials > maxTrials) {
+        showCorrectAnswer(board.common, playerCategory, opponentCategory);
+      }
+      setOpenResultDialog(true);
+      setChecking(false);
     }
   }, [finished]);
 
