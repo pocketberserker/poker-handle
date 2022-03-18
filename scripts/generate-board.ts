@@ -1,10 +1,9 @@
+import format from "date-fns/format";
 import * as poker from "../src/poker";
 import { generate } from "../src/client/generator";
 
 const main = () => {
-  const now = new Date();
-  const nowString = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
-  const board = generate(nowString);
+  const board = generate(format(new Date(), "yyyy-MM-dd"));
 
   const player = `${poker.stringify(board.player[0])} ${poker.stringify(
     board.player[1]
