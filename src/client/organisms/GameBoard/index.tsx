@@ -5,7 +5,7 @@ import { useMessage } from "../../hooks/MessageSnackbar";
 import { useCorrectAnswer } from "../../hooks/CorrectAnswerSnackbar";
 import { Hands } from "../Hands";
 import { Board } from "../../molecules/Board";
-import { Guess } from "../../guess";
+import { Guess, Diff, matchTheAnswers, collectDiff } from "../../guess";
 import { InputPanel } from "../../organisms/InputPanel";
 import { ResultDialog } from "../ResultDialog";
 import { Board as BoardModel } from "../../generator";
@@ -39,20 +39,6 @@ const pickCardsFromGuesses = (
   return corrects;
 };
 
-const checkCorrect = (
-  common: poker.Card[],
-  target: poker.Card,
-  index: number
-): boolean => {
-  // The flop cards are treated as correct if it is included flop range.
-  if (index < 3) {
-    return (
-      common.slice(0, 3).findIndex((c) => poker.equalsCard(c, target)) !== -1
-    );
-  }
-  return poker.equalsCard(target, common[index]);
-};
-
 export const GameBoard: React.FC<Props> = ({
   board,
   init,
@@ -69,18 +55,14 @@ export const GameBoard: React.FC<Props> = ({
   const [column, setColumn] = useState(
     alreadyAnswered ? init[init.length].length : 0
   );
-  const [absents, setAbsents] = useState([...board.player, ...board.opponent]);
-  const [corrects, setCorrects] = useState<poker.Card[]>(
-    pickCardsFromGuesses(init, "correct")
-  );
-  const [partials, setPartials] = useState<poker.Card[]>(
-    pickCardsFromGuesses(init, "partial")
-  );
-  const [partialRanks, setPartialRanks] = useState<poker.Card[]>(
-    pickCardsFromGuesses(init, "partial-rank")
-  );
+  const [diff, setDiff] = useState<Diff>({
+    absents: [...board.player, ...board.opponent],
+    corrects: pickCardsFromGuesses(init, "correct"),
+    partials: pickCardsFromGuesses(init, "partial"),
+    partialRanks: pickCardsFromGuesses(init, "partial-rank"),
+  });
   const [finished, setFinished] = useState(
-    corrects.length === guesses[0].length || trials > maxTrials
+    diff.corrects.length === guesses[0].length || trials > maxTrials
   );
 
   const [checking, setChecking] = useState(false);
@@ -150,77 +132,24 @@ export const GameBoard: React.FC<Props> = ({
   };
 
   const checkAnswer = async (current: number, count: number) => {
-    const newRow: Guess[] = [];
-    const newAbsents: poker.Card[] = [];
-    const newCorrects: poker.Card[] = [];
-    const newPartials: poker.Card[] = [];
-    const newPartialRanks: poker.Card[] = [];
-
-    for (const [i, s] of guesses[current].entries()) {
-      if (s.kind === "blank") {
-        showMessage("Not enough cards");
-        setChecking(false);
-        return;
-      } else if (s.kind !== "entered") {
-        showMessage("Already checked (bug?)");
-        setChecking(false);
-        return;
-      }
-
-      let kind: "correct" | "absent" | "partial" | "partial-rank" = "absent";
-      if (checkCorrect(board.common, s.card, i)) {
-        kind = "correct";
-        newCorrects.push(s.card);
-      } else if (board.common.find((c) => poker.equalsCard(c, s.card))) {
-        kind = "partial";
-        newPartials.push(s.card);
-      } else if (board.common.find((c) => c.rank === s.card.rank)) {
-        kind = "partial-rank";
-        newPartialRanks.push(s.card);
-      } else {
-        newAbsents.push(s.card);
-      }
-
-      newRow.push({
-        kind,
-        card: s.card,
-      });
+    const answers = matchTheAnswers(guesses[current], board.common);
+    if (typeof answers === "string") {
+      showMessage(answers);
+      setChecking(false);
+      return;
     }
 
     const next = [...guesses];
-    next[current] = newRow;
+    next[current] = answers.guesses;
     setGuesses(next);
 
-    setAbsents((prev) => [...prev, ...newAbsents]);
-    setCorrects((prev) => {
-      const ns: poker.Card[] = [];
-      for (const c of newCorrects) {
-        if (prev.findIndex((p) => poker.equalsCard(p, c)) === -1) {
-          ns.push(c);
-        }
-      }
-      return [...prev, ...ns];
-    });
-    setPartials((prev) => {
-      let ns: poker.Card[] = [...prev];
-
-      for (const c of newPartials) {
-        if (ns.findIndex((p) => poker.equalsCard(p, c)) === -1) {
-          ns.push(c);
-        }
-      }
-
-      return ns.filter(
-        (p) => newCorrects.findIndex((c) => poker.equalsCard(c, p)) === -1
-      );
-    });
-    setPartialRanks(newPartialRanks);
+    setDiff((prev) => collectDiff(prev, answers));
 
     setTrials(count + 1);
     setColumn(0);
 
     let finish = false;
-    if (newCorrects.length === guesses[current].length) {
+    if (answers.corrects.length === guesses[current].length) {
       finish = true;
     } else if (count >= maxTrials) {
       finish = true;
@@ -268,10 +197,7 @@ export const GameBoard: React.FC<Props> = ({
           />
         </MobileMainBoard>
         <MobileInput
-          absents={absents}
-          corrects={corrects}
-          partials={partials}
-          partialRanks={partialRanks}
+          diff={diff}
           handleSelect={handleSelect}
           handleEnter={handleEnter}
           handleBackspace={handleBackspace}
@@ -298,10 +224,7 @@ export const GameBoard: React.FC<Props> = ({
         />
       </MainBoard>
       <Input
-        absents={absents}
-        corrects={corrects}
-        partials={partials}
-        partialRanks={partialRanks}
+        diff={diff}
         handleSelect={handleSelect}
         handleEnter={handleEnter}
         handleBackspace={handleBackspace}

@@ -5,15 +5,13 @@ import { BackspaceButton } from "../../molecules/BackspaceButton";
 import { EnterButton } from "../../molecules/EnterButton";
 import { SuitTabs } from "../SuitTabs";
 import * as poker from "../../../poker";
+import { Diff } from "../../guess";
 
 type SuitPanelProps = {
   suit: poker.Suit;
   index: number;
   value: number;
-  absents: poker.Card[];
-  corrects: poker.Card[];
-  partials: poker.Card[];
-  partialRanks: poker.Card[];
+  diff: Diff;
   handleSelect: (card: poker.Card) => void;
 };
 
@@ -21,10 +19,7 @@ const SuitPanel: React.FC<SuitPanelProps> = ({
   suit,
   value,
   index,
-  absents,
-  corrects,
-  partials,
-  partialRanks,
+  diff,
   handleSelect,
 }) => (
   <div
@@ -43,16 +38,18 @@ const SuitPanel: React.FC<SuitPanelProps> = ({
               card={card}
               click={(c) => handleSelect(c)}
               disabled={
-                absents.findIndex((c) => poker.equalsCard(c, card)) !== -1
+                diff.absents.findIndex((c) => poker.equalsCard(c, card)) !== -1
               }
               correct={
-                corrects.findIndex((c) => poker.equalsCard(c, card)) !== -1
+                diff.corrects.findIndex((c) => poker.equalsCard(c, card)) !== -1
               }
               partial={
-                partials.findIndex((c) => poker.equalsCard(c, card)) !== -1
+                diff.partials.findIndex((c) => poker.equalsCard(c, card)) !== -1
               }
               partialRank={
-                partialRanks.findIndex((c) => poker.equalsCard(c, card)) !== -1
+                diff.partialRanks.findIndex((c) =>
+                  poker.equalsCard(c, card)
+                ) !== -1
               }
             />
           );
@@ -93,10 +90,7 @@ const ButtonPanelContainer = styled.div`
 `;
 
 type InputPanelProps = {
-  absents: poker.Card[];
-  corrects: poker.Card[];
-  partials: poker.Card[];
-  partialRanks: poker.Card[];
+  diff: Diff;
   handleSelect: (card: poker.Card) => void;
   handleEnter: () => void;
   handleBackspace: () => void;
@@ -104,10 +98,7 @@ type InputPanelProps = {
 };
 
 export const InputPanel: React.FC<InputPanelProps> = ({
-  absents,
-  corrects,
-  partials,
-  partialRanks,
+  diff,
   handleSelect,
   handleEnter,
   handleBackspace,
@@ -124,40 +115,28 @@ export const InputPanel: React.FC<InputPanelProps> = ({
         suit="C"
         value={tab}
         index={0}
-        absents={absents}
-        corrects={corrects}
-        partials={partials}
-        partialRanks={partialRanks}
+        diff={diff}
         handleSelect={handleSelect}
       />
       <SuitPanel
         suit="D"
         value={tab}
         index={1}
-        absents={absents}
-        corrects={corrects}
-        partials={partials}
-        partialRanks={partialRanks}
+        diff={diff}
         handleSelect={handleSelect}
       />
       <SuitPanel
         suit="H"
         value={tab}
         index={2}
-        absents={absents}
-        corrects={corrects}
-        partials={partials}
-        partialRanks={partialRanks}
+        diff={diff}
         handleSelect={handleSelect}
       />
       <SuitPanel
         suit="S"
         value={tab}
         index={3}
-        absents={absents}
-        corrects={corrects}
-        partials={partials}
-        partialRanks={partialRanks}
+        diff={diff}
         handleSelect={handleSelect}
       />
       <ButtonPanel
