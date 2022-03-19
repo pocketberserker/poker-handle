@@ -54,15 +54,10 @@ const tryGenerate = (arng: seedrandom.PRNG): Board | null => {
       const p: [poker.Card, poker.Card] = [first, second];
 
       const playerRank = poker.evaluate([...common, ...p]);
-      if (
-        playerRank >= opponentRank ||
-        (opponentCategory === "High Card" &&
-          poker.getRankCategory(playerRank) === "High Card")
-      ) {
-        continue;
+      if (playerRank < opponentRank) {
+        player = p;
+        break;
       }
-      player = p;
-      break;
     } catch (e) {}
   }
 
