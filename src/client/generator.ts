@@ -3,7 +3,7 @@ import * as poker from "../poker";
 
 export type Board = {
   player: [poker.Card, poker.Card];
-  opponent: [poker.Card, poker.Card];
+  opponents: [poker.Card, poker.Card][];
   common: poker.Card[];
 };
 
@@ -16,15 +16,26 @@ const genCard = (arng: seedrandom.PRNG, ignore: poker.Card[]): poker.Card => {
   return card;
 };
 
-const tryCount = 5;
-const tryGenerate = (arng: seedrandom.PRNG): Board | null => {
-  const ignore: poker.Card[] = [];
+const genOpponentHands = (
+  arng: seedrandom.PRNG,
+  ignore: poker.Card[]
+): [poker.Card, poker.Card] => {
+  const first = genCard(arng, ignore);
+  ignore.push(first);
+  const second = genCard(arng, ignore);
+  ignore.push(second);
+  return [first, second];
+};
 
-  const opponentFirst = genCard(arng, ignore);
-  ignore.push(opponentFirst);
-  const opponentSecond = genCard(arng, ignore);
-  ignore.push(opponentSecond);
-  const opponent: [poker.Card, poker.Card] = [opponentFirst, opponentSecond];
+const tryCount = 5;
+const tryGenerate = (
+  arng: seedrandom.PRNG,
+  opponentCount: 1 | 3
+): Board | null => {
+  const ignore: poker.Card[] = [];
+  const opponents = [...Array(opponentCount).keys()].map(() =>
+    genOpponentHands(arng, ignore)
+  );
 
   const common: poker.Card[] = [];
   for (let i = 0; i < 5; i++) {
@@ -33,14 +44,18 @@ const tryGenerate = (arng: seedrandom.PRNG): Board | null => {
     ignore.push(c);
   }
 
-  const opponentRank = poker.evaluate([...common, ...opponent]);
-  const opponentCategory = poker.getRankCategory(opponentRank);
+  const opponentRanks = opponents.map((o) => poker.evaluate([...common, ...o]));
 
-  if (
-    opponent[0].rank === opponent[1].rank &&
-    (opponentCategory === "One Pair" || opponentCategory === "Two Pair")
-  ) {
-    return null;
+  if (opponents.length === 1 && opponentRanks.length === 1) {
+    const [hand0, hand1] = opponents[0];
+    const opponentCategory = poker.getRankCategory(opponentRanks[0]);
+
+    if (
+      hand0.rank === hand1.rank &&
+      (opponentCategory === "One Pair" || opponentCategory === "Two Pair")
+    ) {
+      return null;
+    }
   }
 
   let player: [poker.Card, poker.Card] | null = null;
@@ -54,7 +69,7 @@ const tryGenerate = (arng: seedrandom.PRNG): Board | null => {
       const p: [poker.Card, poker.Card] = [first, second];
 
       const playerRank = poker.evaluate([...common, ...p]);
-      if (playerRank < opponentRank) {
+      if (opponentRanks.every((r) => playerRank < r)) {
         player = p;
         break;
       }
@@ -64,7 +79,7 @@ const tryGenerate = (arng: seedrandom.PRNG): Board | null => {
   if (player) {
     return {
       player,
-      opponent,
+      opponents,
       common,
     };
   }
@@ -72,12 +87,12 @@ const tryGenerate = (arng: seedrandom.PRNG): Board | null => {
   return null;
 };
 
-export const generate = (seed: string): Board => {
+export const generate = (seed: string, opponents: 1 | 3): Board => {
   const arng = seedrandom.alea(seed);
 
   let game: Board | null = null;
   while (game === null) {
-    game = tryGenerate(arng);
+    game = tryGenerate(arng, opponents);
   }
 
   return game;

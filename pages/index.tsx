@@ -28,8 +28,9 @@ const Home: NextPage = () => {
   const play = () => {
     const next =
       typeof router.query.seed === "string" ? router.query.seed : nowString();
+    const opponents = router.query.opponents === "1" ? 1 : 3;
     setGuesses(genGuesses());
-    setBoard(poker.generate(next));
+    setBoard(poker.generate(next, opponents));
   };
 
   useEffect(() => {

@@ -9,7 +9,7 @@ export const CorrectAnswerSnackbarContext = createContext<
   (
     cards: poker.Card[],
     player: poker.Category,
-    opponent: poker.Category
+    opponents: poker.Category[]
   ) => void
 >(() => {});
 
@@ -22,17 +22,17 @@ export const CorrectAnswerSnackbarProvider: React.FC<Props> = ({
 }) => {
   const [correct, setCorrect] = useState<poker.Card[]>([]);
   const [player, setPlayer] = useState<poker.Category>("High Card");
-  const [opponent, setOpponent] = useState<poker.Category>("High Card");
+  const [opponents, setOpponents] = useState<poker.Category[]>([]);
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = (
     cards: poker.Card[],
     player: poker.Category,
-    opponent: poker.Category
+    opponents: poker.Category[]
   ) => {
     setCorrect(cards);
     setPlayer(player);
-    setOpponent(opponent);
+    setOpponents(opponents);
     setOpen(true);
   };
 
@@ -67,8 +67,17 @@ export const CorrectAnswerSnackbarProvider: React.FC<Props> = ({
             ))}
           </CardList>
           <Categories>
-            <Category variant="h6">{player}</Category>
-            <Category variant="h6">{opponent}</Category>
+            <Column>
+              <Category>{player}</Category>
+              {opponents.length !== 1 && <Category>{opponents[0]}</Category>}
+            </Column>
+            <Column>
+              {(opponents.length === 1 ? opponents : opponents.slice(1)).map(
+                (opponent) => (
+                  <Category key={opponent}>{opponent}</Category>
+                )
+              )}
+            </Column>
           </Categories>
         </AnswerContainer>
       </Snackbar>
@@ -108,6 +117,13 @@ const Categories = styled.div`
   padding: 0 10px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+`;
+
+const Column = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
 `;
 

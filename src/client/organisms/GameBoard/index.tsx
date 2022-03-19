@@ -2,7 +2,7 @@ import React, { useState, useMemo } from "react";
 import { useMessage } from "../../hooks/MessageSnackbar";
 import { useCorrectAnswer } from "../../hooks/CorrectAnswerSnackbar";
 import { GameBoardLayout } from "../GameBoardLayout";
-import { Hands } from "../Hands";
+import { HandsArea } from "../HandsArea";
 import { Board } from "../../molecules/Board";
 import { Guess, Diff, matchTheAnswers, collectDiff } from "../../guess";
 import { Board as BoardModel } from "../../generator";
@@ -45,13 +45,18 @@ export const GameBoard: React.FC<Props> = ({
   const { showMessage } = useMessage();
   const { showCorrectAnswer } = useCorrectAnswer();
 
+  const allHands = useMemo(
+    () => [...board.player, ...board.opponents.flat()],
+    [board]
+  );
+
   const [guesses, setGuesses] = useState(init);
   const [trials, setTrials] = useState(alreadyAnswered ? maxTrials + 1 : 1);
   const [column, setColumn] = useState(
     alreadyAnswered ? init[init.length].length : 0
   );
   const [diff, setDiff] = useState<Diff>({
-    absents: [...board.player, ...board.opponent],
+    absents: allHands,
     corrects: pickCardsFromGuesses(init, "correct"),
     partials: pickCardsFromGuesses(init, "partial"),
     partialRanks: pickCardsFromGuesses(init, "partial-rank"),
@@ -62,11 +67,11 @@ export const GameBoard: React.FC<Props> = ({
   const [finished, setFinished] = useState(completed || trials > maxTrials);
   const [checking, setChecking] = useState(false);
 
-  const [playerCategory, opponentCategory] = useMemo(
+  const [playerCategory, opponentCategories] = useMemo(
     () => [
       poker.getRankCategory(poker.evaluate([...board.common, ...board.player])),
-      poker.getRankCategory(
-        poker.evaluate([...board.common, ...board.opponent])
+      board.opponents.map((opponent) =>
+        poker.getRankCategory(poker.evaluate([...board.common, ...opponent]))
       ),
     ],
     [board]
@@ -138,7 +143,7 @@ export const GameBoard: React.FC<Props> = ({
     setGuesses(next);
 
     setDiff((prev) =>
-      collectDiff(prev, answers, [...board.player, ...board.opponent])
+      collectDiff(prev, answers, [...board.player, ...allHands])
     );
 
     setTrials(count + 1);
@@ -168,12 +173,39 @@ export const GameBoard: React.FC<Props> = ({
     <GameBoardLayout
       board={
         <>
-          <Hands name="you" cards={board.player} />
+          <HandsArea
+            members={(
+              [{ name: "you", cards: board.player }] as {
+                name: string;
+                cards: [poker.Card, poker.Card];
+                category?: poker.Category;
+              }[]
+            ).concat(
+              board.opponents.length === 1
+                ? []
+                : [
+                    {
+                      name: "other1",
+                      cards: board.opponents[0],
+                      category: opponentCategories[0],
+                    },
+                  ]
+            )}
+            small={board.opponents.length > 1}
+          />
           <Board guesses={guesses} />
-          <Hands
-            name="other"
-            cards={board.opponent}
-            category={opponentCategory}
+          <HandsArea
+            members={board.opponents
+              .slice(board.opponents.length === 1 ? 0 : 1)
+              .map((cards, i) => {
+                const offset = board.opponents.length === 1 ? 0 : 1;
+                return {
+                  name: `other${i + offset + 1}`,
+                  cards,
+                  category: opponentCategories[i + offset],
+                };
+              })}
+            small={board.opponents.length > 1}
           />
         </>
       }
@@ -187,7 +219,7 @@ export const GameBoard: React.FC<Props> = ({
       handleBackspace={handleBackspace}
       handleEnter={handleEnter}
       showCorrectAnswer={() =>
-        showCorrectAnswer(board.common, playerCategory, opponentCategory)
+        showCorrectAnswer(board.common, playerCategory, opponentCategories)
       }
       onFinish={() => setChecking(false)}
     />

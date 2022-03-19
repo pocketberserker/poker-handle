@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
 import * as poker from "../../../poker";
-import { Hand } from "../../molecules/Hand";
+import { Hand } from "../Hand";
 
 type Props = {
   name: string;
@@ -18,7 +18,7 @@ export const Hands: React.FC<Props> = ({
   small,
   className,
 }) => (
-  <Area className={className}>
+  <Container className={className}>
     <Name>{name}</Name>
     {cards.map((card) => (
       <Hand key={poker.stringify(card)} card={card} small={small} />
@@ -28,10 +28,10 @@ export const Hands: React.FC<Props> = ({
     ) : (
       <Category>{category ?? "?"}</Category>
     )}
-  </Area>
+  </Container>
 );
 
-const Area = styled.div`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -55,7 +55,7 @@ const Category = styled.div`
 const SmallCategory = styled(Category)`
   margin-top: 0;
   max-width: 40px;
-  height: itinial;
+  height: 32px;
   font-weight: bold;
-  font-size: 12px;
+  font-size: 10px;
 `;
