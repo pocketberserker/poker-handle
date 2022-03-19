@@ -1,13 +1,10 @@
-import React, { useState, useEffect, useMemo } from "react";
-import styled from "@emotion/styled";
-import { useMobile } from "../../hooks/MediaQuery";
+import React, { useState, useMemo } from "react";
 import { useMessage } from "../../hooks/MessageSnackbar";
 import { useCorrectAnswer } from "../../hooks/CorrectAnswerSnackbar";
+import { GameBoardLayout } from "../GameBoardLayout";
 import { Hands } from "../Hands";
 import { Board } from "../../molecules/Board";
 import { Guess, Diff, matchTheAnswers, collectDiff } from "../../guess";
-import { InputPanel } from "../../organisms/InputPanel";
-import { ResultDialog } from "../ResultDialog";
 import { Board as BoardModel } from "../../generator";
 import * as poker from "../../../poker";
 import { maxTrials } from "../../constants/meta";
@@ -45,8 +42,6 @@ export const GameBoard: React.FC<Props> = ({
   alreadyAnswered,
   play,
 }) => {
-  const { isMobile } = useMobile();
-
   const { showMessage } = useMessage();
   const { showCorrectAnswer } = useCorrectAnswer();
 
@@ -61,13 +56,11 @@ export const GameBoard: React.FC<Props> = ({
     partials: pickCardsFromGuesses(init, "partial"),
     partialRanks: pickCardsFromGuesses(init, "partial-rank"),
   });
-  const [isComplete, setIsComplete] = useState(
+  const [completed, setCompleted] = useState(
     diff.corrects.length === guesses[0].length
   );
-  const [finished, setFinished] = useState(isComplete || trials > maxTrials);
-
+  const [finished, setFinished] = useState(completed || trials > maxTrials);
   const [checking, setChecking] = useState(false);
-  const [openResultDialog, setOpenResultDialog] = useState(false);
 
   const [playerCategory, opponentCategory] = useMemo(
     () => [
@@ -151,9 +144,9 @@ export const GameBoard: React.FC<Props> = ({
     setTrials(count + 1);
     setColumn(0);
 
-    const clear = answers.corrects.length === guesses[current].length;
-    setIsComplete(clear);
-    let finish = clear || count >= maxTrials;
+    const complete = answers.corrects.length === guesses[current].length;
+    setCompleted(complete);
+    let finish = complete || count >= maxTrials;
     setFinished(finish);
 
     if (finish === false) {
@@ -171,25 +164,10 @@ export const GameBoard: React.FC<Props> = ({
     checkAnswer(trials - 1, trials);
   };
 
-  const handleCloseResultDialog = () => {
-    setOpenResultDialog(false);
-  };
-
-  useEffect(() => {
-    if (finished) {
-      // TODO: animation
-      if (trials > maxTrials && isComplete === false) {
-        showCorrectAnswer(board.common, playerCategory, opponentCategory);
-      }
-      setOpenResultDialog(true);
-      setChecking(false);
-    }
-  }, [finished, trials, isComplete]);
-
-  if (isMobile) {
-    return (
-      <>
-        <MobileMainBoard>
+  return (
+    <GameBoardLayout
+      board={
+        <>
           <Hands name="you" cards={board.player} />
           <Board guesses={guesses} />
           <Hands
@@ -197,68 +175,21 @@ export const GameBoard: React.FC<Props> = ({
             cards={board.opponent}
             category={opponentCategory}
           />
-        </MobileMainBoard>
-        <MobileInput
-          diff={diff}
-          handleSelect={handleSelect}
-          handleEnter={handleEnter}
-          handleBackspace={handleBackspace}
-        />
-        <ResultDialog
-          guesses={guesses}
-          open={openResultDialog}
-          close={handleCloseResultDialog}
-          play={play}
-        />
-      </>
-    );
-  }
-
-  return (
-    <>
-      <MainBoard>
-        <Hands name="you" cards={board.player} />
-        <Board guesses={guesses} />
-        <Hands
-          name="other"
-          cards={board.opponent}
-          category={opponentCategory}
-        />
-      </MainBoard>
-      <Input
-        diff={diff}
-        handleSelect={handleSelect}
-        handleEnter={handleEnter}
-        handleBackspace={handleBackspace}
-      />
-      <ResultDialog
-        guesses={guesses}
-        open={openResultDialog}
-        close={handleCloseResultDialog}
-        play={play}
-      />
-    </>
+        </>
+      }
+      guesses={guesses}
+      diff={diff}
+      trials={trials}
+      finished={finished}
+      completed={completed}
+      play={play}
+      handleSelect={handleSelect}
+      handleBackspace={handleBackspace}
+      handleEnter={handleEnter}
+      showCorrectAnswer={() =>
+        showCorrectAnswer(board.common, playerCategory, opponentCategory)
+      }
+      onFinish={() => setChecking(false)}
+    />
   );
 };
-
-const MainBoard = styled.div`
-  margin-top: 40px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const MobileMainBoard = styled(MainBoard)`
-  margin-top: 12px;
-`;
-
-const Input = styled(InputPanel)`
-  margin-top: 40px;
-  max-width: 400px;
-`;
-
-const MobileInput = styled(Input)`
-  margin-top: 10px;
-  width: 98%;
-`;
