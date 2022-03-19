@@ -17,7 +17,14 @@ export const BoardCard: React.FC<Props> = ({ guess }) => {
   let image = <div />;
   let confirmed: string | undefined;
   if (guess.kind !== "blank") {
-    image = <Card card={guess.card} width={width} height={height} />;
+    image = (
+      <Card
+        card={guess.card}
+        width={width}
+        height={height}
+        reversed={guess.kind !== "entered"}
+      />
+    );
 
     if (guess.kind === "absent") {
       confirmed = theme.wordle.absent;

@@ -36,7 +36,12 @@ export const CardButton: React.FC<Props> = ({
       {correct && <Correct />}
       {partial && <Partial />}
       {partialRank && <PartialRank />}
-      <StyledCard card={card} width={width} height={height} />
+      <StyledCard
+        card={card}
+        reversed={disabled || correct || partial || partialRank}
+        width={width}
+        height={height}
+      />
     </Button>
   );
 };

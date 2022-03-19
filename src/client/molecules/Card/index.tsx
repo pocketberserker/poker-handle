@@ -1,65 +1,57 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { Image } from "../../atoms/Image";
 import * as poker from "../../../poker";
 
 type Props = {
   card: poker.Card;
   width: number;
   height: number;
+  reversed?: boolean;
   className?: string;
 };
 
-const getCardImageUrl = (rank: poker.Rank, suit: poker.Suit): string => {
-  let n;
-  switch (rank) {
-    case "T":
-      n = "10";
-      break;
-    case "J":
-      n = "11";
-      break;
-    case "Q":
-      n = "12";
-      break;
-    case "K":
-      n = "13";
-      break;
-    case "A":
-      n = "01";
-      break;
-    default:
-      n = `0${rank}`;
-      break;
-  }
-
-  let s = "";
+const toLabel = (suit: poker.Suit): string => {
   switch (suit) {
     case "C":
-      s = "club";
-      break;
+      return "♣";
     case "D":
-      s = "diamond";
-      break;
+      return "♦";
     case "H":
-      s = "heart";
-      break;
+      return "♥";
     case "S":
-      s = "spade";
-      break;
+      return "♠";
   }
-
-  return `images/cards/card_${s}_${n}.png`;
 };
 
-export const Card: React.FC<Props> = ({ card, width, height, className }) => {
+export const Card: React.FC<Props> = ({
+  card,
+  width,
+  height,
+  reversed,
+  className,
+}) => {
   return (
-    <Image
-      className={className}
-      src={getCardImageUrl(card.rank, card.suit)}
-      alt={poker.stringify(card)}
-      width={width}
-      height={height}
-    />
+    <Frame className={className} reversed={reversed} style={{ width, height }}>
+      <Rank reversed={reversed}>{card.rank}</Rank>
+      <Suit reversed={reversed}>{toLabel(card.suit)}</Suit>
+    </Frame>
   );
 };
+
+const Rank = styled.span<{ reversed?: boolean }>`
+  color: ${({ reversed, theme }) =>
+    reversed ? theme.extras.white : theme.extras.black};
+  z-index: ${({ reversed }) => (reversed ? 1 : 0)};
+`;
+
+const Suit = styled(Rank)``;
+
+const Frame = styled.div<{ reversed?: boolean }>`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: ${({ theme }) => theme.extras.white};
+  border: ${({ reversed }) => (reversed ? "0" : "1px solid")};
+  border-radius: 4px;
+`;
