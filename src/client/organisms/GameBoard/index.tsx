@@ -61,9 +61,10 @@ export const GameBoard: React.FC<Props> = ({
     partials: pickCardsFromGuesses(init, "partial"),
     partialRanks: pickCardsFromGuesses(init, "partial-rank"),
   });
-  const [finished, setFinished] = useState(
-    diff.corrects.length === guesses[0].length || trials > maxTrials
+  const [isComplete, setIsComplete] = useState(
+    diff.corrects.length === guesses[0].length
   );
+  const [finished, setFinished] = useState(isComplete || trials > maxTrials);
 
   const [checking, setChecking] = useState(false);
   const [openResultDialog, setOpenResultDialog] = useState(false);
@@ -150,8 +151,9 @@ export const GameBoard: React.FC<Props> = ({
     setTrials(count + 1);
     setColumn(0);
 
-    let finish =
-      answers.corrects.length === guesses[current].length || count >= maxTrials;
+    const clear = answers.corrects.length === guesses[current].length;
+    setIsComplete(clear);
+    let finish = clear || count >= maxTrials;
     setFinished(finish);
 
     if (finish === false) {
@@ -176,13 +178,13 @@ export const GameBoard: React.FC<Props> = ({
   useEffect(() => {
     if (finished) {
       // TODO: animation
-      if (trials > maxTrials) {
+      if (trials > maxTrials && isComplete === false) {
         showCorrectAnswer(board.common, playerCategory, opponentCategory);
       }
       setOpenResultDialog(true);
       setChecking(false);
     }
-  }, [finished]);
+  }, [finished, trials, isComplete]);
 
   if (isMobile) {
     return (
