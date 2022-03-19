@@ -1,6 +1,7 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useMessage } from "../../hooks/MessageSnackbar";
 import { useCorrectAnswer } from "../../hooks/CorrectAnswerSnackbar";
+import { useAnimation } from "../../hooks/Animation";
 import { GameBoardLayout } from "../GameBoardLayout";
 import { HandsArea } from "../HandsArea";
 import { Board } from "../../molecules/Board";
@@ -44,6 +45,7 @@ export const GameBoard: React.FC<Props> = ({
 }) => {
   const { showMessage } = useMessage();
   const { showCorrectAnswer } = useCorrectAnswer();
+  const { rotate, playRotate } = useAnimation();
 
   const allHands = useMemo(
     () => [...board.player, ...board.opponents.flat()],
@@ -60,6 +62,12 @@ export const GameBoard: React.FC<Props> = ({
     corrects: pickCardsFromGuesses(init, "correct"),
     partials: pickCardsFromGuesses(init, "partial"),
     partialRanks: pickCardsFromGuesses(init, "partial-rank"),
+  });
+  const [tmpDiff, setTmpDiff] = useState<Diff>({
+    absents: [],
+    corrects: [],
+    partials: [],
+    partialRanks: [],
   });
   const [completed, setCompleted] = useState(
     diff.corrects.length === guesses[0].length
@@ -142,7 +150,7 @@ export const GameBoard: React.FC<Props> = ({
     next[current] = answers.guesses;
     setGuesses(next);
 
-    setDiff((prev) =>
+    setTmpDiff((prev) =>
       collectDiff(prev, answers, [...board.player, ...allHands])
     );
 
@@ -154,9 +162,7 @@ export const GameBoard: React.FC<Props> = ({
     let finish = complete || count >= maxTrials;
     setFinished(finish);
 
-    if (finish === false) {
-      setChecking(false);
-    }
+    playRotate(current);
   };
 
   const handleEnter = () => {
@@ -168,6 +174,13 @@ export const GameBoard: React.FC<Props> = ({
 
     checkAnswer(trials - 1, trials);
   };
+
+  useEffect(() => {
+    if (rotate === -1 && finished === false) {
+      setDiff(tmpDiff);
+      setChecking(false);
+    }
+  }, [rotate, finished, tmpDiff]);
 
   return (
     <GameBoardLayout

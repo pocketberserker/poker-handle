@@ -19,6 +19,8 @@ const Answer: React.FC<AnswerProps> = ({ guesses, row }) => (
             : poker.stringify(guess.card)
         }
         guess={guess}
+        row={row}
+        index={i}
       />
     ))}
   </AnswerItems>
