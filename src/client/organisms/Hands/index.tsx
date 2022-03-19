@@ -7,6 +7,7 @@ type Props = {
   name: string;
   cards: poker.Card[];
   category?: poker.Category;
+  small?: boolean;
   className?: string;
 };
 
@@ -14,18 +15,21 @@ export const Hands: React.FC<Props> = ({
   name,
   cards,
   category,
+  small,
   className,
-}) => {
-  return (
-    <Area className={className}>
-      <Name>{name}</Name>
-      {cards.map((card) => (
-        <Hand key={poker.stringify(card)} card={card} />
-      ))}
+}) => (
+  <Area className={className}>
+    <Name>{name}</Name>
+    {cards.map((card) => (
+      <Hand key={poker.stringify(card)} card={card} small={small} />
+    ))}
+    {small ? (
+      <SmallCategory>{category ?? "?"}</SmallCategory>
+    ) : (
       <Category>{category ?? "?"}</Category>
-    </Area>
-  );
-};
+    )}
+  </Area>
+);
 
 const Area = styled.div`
   display: flex;
@@ -35,7 +39,7 @@ const Area = styled.div`
   text-align: center;
 `;
 
-const Name = styled.div`
+const Name = styled.span`
   font-weight: bold;
   color: ${({ theme }) => theme.palette.text.primary};
 `;
@@ -46,4 +50,12 @@ const Category = styled.div`
   height: 60px;
   font-weight: bold;
   color: ${({ theme }) => theme.palette.text.primary};
+`;
+
+const SmallCategory = styled(Category)`
+  margin-top: 0;
+  max-width: 40px;
+  height: itinial;
+  font-weight: bold;
+  font-size: 12px;
 `;
