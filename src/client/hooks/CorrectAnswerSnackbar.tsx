@@ -61,14 +61,14 @@ export const CorrectAnswerSnackbarProvider: React.FC<Props> = ({
               <Card
                 key={poker.stringify(card)}
                 card={card}
-                width={60}
-                height={88}
+                width={40}
+                height={58}
               />
             ))}
           </CardList>
           <Categories>
-            <Category variant="h5">{player}</Category>
-            <Category variant="h5">{opponent}</Category>
+            <Category variant="h6">{player}</Category>
+            <Category variant="h6">{opponent}</Category>
           </Categories>
         </AnswerContainer>
       </Snackbar>
@@ -79,7 +79,7 @@ export const CorrectAnswerSnackbarProvider: React.FC<Props> = ({
 
 const AnswerContainer = styled.div`
   min-width: 288px;
-  padding: 30px 30px 20px 30px;
+  padding: 30px 20px 10px 20px;
   display: flex;
   flex-direction: column;
   background: ${({ theme }) =>
