@@ -1,6 +1,12 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { Card } from "../Card";
+import {
+  AbsentOverlay,
+  PartialOverlay,
+  PartialRankOverlay,
+  CorrectOverlay,
+} from "../CardOverlay";
 import * as poker from "../../../poker";
 
 type Props = {
@@ -32,10 +38,10 @@ export const CardButton: React.FC<Props> = ({
         click(card);
       }}
     >
-      {disabled && <Disabled />}
-      {correct && <Correct />}
-      {partial && <Partial />}
-      {partialRank && <PartialRank />}
+      {disabled && <AbsentOverlay />}
+      {correct && <CorrectOverlay />}
+      {partial && <PartialOverlay />}
+      {partialRank && <PartialRankOverlay />}
       <StyledCard
         card={card}
         reversed={disabled || correct || partial || partialRank}
@@ -52,32 +58,6 @@ const Button = styled.div`
   margin: 5px 2px;
   position: relative;
   cursor: pointer;
-`;
-
-const Overlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  z-index: 1;
-  opacity: 0.7;
-`;
-
-const Disabled = styled(Overlay)`
-  background-color: ${({ theme }) => theme.wordle.absent};
-`;
-
-const Correct = styled(Overlay)`
-  background-color: ${({ theme }) => theme.wordle.correct};
-`;
-
-const Partial = styled(Overlay)`
-  background-color: ${({ theme }) => theme.wordle.partial};
-`;
-
-const PartialRank = styled(Overlay)`
-  background-color: ${({ theme }) => theme.extras.guess.rank};
 `;
 
 const StyledCard = styled(Card)`

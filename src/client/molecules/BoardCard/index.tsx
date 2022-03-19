@@ -1,6 +1,12 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { useTheme } from "@mui/material/styles";
+import {
+  AbsentOverlay,
+  PartialOverlay,
+  PartialRankOverlay,
+  CorrectOverlay,
+} from "../CardOverlay";
 import { Card } from "../../molecules/Card";
 import { Guess } from "../../guess";
 
@@ -15,7 +21,7 @@ export const BoardCard: React.FC<Props> = ({ guess }) => {
   const theme = useTheme();
 
   let image = <div />;
-  let confirmed: string | undefined;
+  let overlay = <div />;
   if (guess.kind !== "blank") {
     image = (
       <Card
@@ -27,13 +33,13 @@ export const BoardCard: React.FC<Props> = ({ guess }) => {
     );
 
     if (guess.kind === "absent") {
-      confirmed = theme.wordle.absent;
+      overlay = <AbsentOverlay />;
     } else if (guess.kind === "partial") {
-      confirmed = theme.wordle.partial;
+      overlay = <PartialOverlay />;
     } else if (guess.kind === "partial-rank") {
-      confirmed = theme.extras.guess.rank;
+      overlay = <PartialRankOverlay />;
     } else if (guess.kind === "correct") {
-      confirmed = theme.wordle.correct;
+      overlay = <CorrectOverlay />;
     }
   }
 
@@ -46,7 +52,7 @@ export const BoardCard: React.FC<Props> = ({ guess }) => {
             : undefined,
       }}
     >
-      {confirmed && <Confirmed style={{ backgroundColor: confirmed }} />}
+      {overlay}
       {image}
     </Wrapper>
   );
@@ -58,14 +64,4 @@ const Wrapper = styled.div`
   height: ${height}px;
   position: relative;
   border-radius: 4px;
-`;
-
-const Confirmed = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  z-index: 1;
-  opacity: 0.7;
 `;
