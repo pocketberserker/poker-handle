@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
-import { useTheme } from "@mui/material/styles";
+import { keyframes, css } from "@emotion/react";
 import { useAnimation } from "../../hooks/Animation";
 import {
   AbsentOverlay,
@@ -10,6 +10,7 @@ import {
 } from "../CardOverlay";
 import { Card } from "../../molecules/Card";
 import { Guess } from "../../guess";
+import { reverseDurationMs } from "../../constants/meta";
 
 type Props = {
   guess: Guess;
@@ -20,40 +21,19 @@ type Props = {
 const width = 40;
 const height = 58;
 
-const fps = 1000 / 60;
-
-const appendAngle = 5;
-
 export const BoardCard: React.FC<Props> = ({ guess, row, index }) => {
-  const theme = useTheme();
-  const { rotate } = useAnimation();
-  const [rotating, setRotating] = useState(false);
+  const { reverseIndex } = useAnimation();
+  const [reversed, setReversed] = useState(false);
   const [opened, setOpened] = useState(false);
-  const [deg, setDeg] = useState(0);
 
   useEffect(() => {
-    const loopRotate = () => {
-      setDeg((prev) => {
-        const next = prev >= 180 ? prev : prev + appendAngle;
-        if (next >= 90) {
-          setOpened(true);
-        }
-        return next;
-      });
-      if (rotate === row) {
-        setTimeout(loopRotate, fps);
-      }
-    };
-
-    if (rotate === row) {
-      setRotating(true);
-      if (index == 0) {
-        loopRotate();
-      } else {
-        setTimeout(loopRotate, index * 10 * fps);
-      }
+    if (reverseIndex === row) {
+      setTimeout(() => {
+        setReversed(true);
+        setTimeout(() => setOpened(true), reverseDurationMs / 2);
+      }, index * 160);
     }
-  }, [rotate, index]);
+  }, [reverseIndex, index]);
 
   let image = <div />;
   let overlay = <div />;
@@ -81,27 +61,54 @@ export const BoardCard: React.FC<Props> = ({ guess, row, index }) => {
   }
 
   return (
-    <Wrapper
-      style={{
-        border:
-          guess.kind === "blank"
-            ? `1.5px solid ${theme.wordle.border}`
-            : undefined,
-        transform: `rotate3d(0, 1, 0, ${
-          opened ? (deg >= 180 ? 0 : 180 - deg) : deg
-        }deg)`,
-      }}
-    >
+    <Wrapper blank={guess.kind === "blank"} reversed={reversed} opened={opened}>
       {overlay}
       {image}
     </Wrapper>
   );
 };
 
-const Wrapper = styled.div`
+const firstReverse = keyframes`
+  from {
+    transform: rotate3d(0, 1, 0, 0deg);
+  }
+
+  to {
+    transform: rotate3d(0, 1, 0, 90deg);
+  }
+`;
+
+const secondReverse = keyframes`
+  from {
+    transform: rotate3d(0, 1, 0, -90deg);
+  }
+
+  to {
+    transform: rotate3d(0, 1, 0, 0deg);
+  }
+`;
+
+const firstReverseAnimation = css`
+  animation: ${reverseDurationMs / 1000 / 2}s linear ${firstReverse} forwards;
+`;
+
+const secondReverseAnimation = css`
+  animation: ${reverseDurationMs / 1000 / 2}s linear ${secondReverse} forwards;
+`;
+
+const Wrapper = styled.div<{
+  reversed: boolean;
+  opened: boolean;
+  blank: boolean;
+}>`
   margin: 4px;
   width: ${width}px;
   height: ${height}px;
   position: relative;
   border-radius: 4px;
+  ${({ blank, theme }) =>
+    blank ? `border: 1.5px solid ${theme.wordle.border};` : ""}
+  ${({ reversed, opened }) =>
+    reversed && opened === false && firstReverseAnimation}
+  ${({ reversed, opened }) => reversed && opened && secondReverseAnimation}
 `;

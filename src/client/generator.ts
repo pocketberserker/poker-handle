@@ -1,5 +1,6 @@
 import * as seedrandom from "seedrandom";
 import * as poker from "../poker";
+import { commonCardCounts } from "./constants/meta";
 
 export type Board = {
   player: [poker.Card, poker.Card];
@@ -38,7 +39,7 @@ const tryGenerate = (
   );
 
   const common: poker.Card[] = [];
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < commonCardCounts; i++) {
     const c = genCard(arng, ignore);
     common.push(c);
     ignore.push(c);

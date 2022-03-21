@@ -1,34 +1,33 @@
 import React, { useState, createContext, useContext } from "react";
+import { reverseDurationMs, commonCardCounts } from "../constants/meta";
 
 export const AnimationContext = createContext<{
-  rotate: number;
-  playRotate: (row: number) => void;
+  reverseIndex: number;
+  playReverse: (row: number) => void;
 }>({
-  rotate: -1,
-  playRotate: () => void 0,
+  reverseIndex: -1,
+  playReverse: () => void 0,
 });
 
 type Props = {
   children: React.ReactNode;
 };
 
-const rotateTime = 1300;
-
 export const AnimationProvider: React.FC<Props> = ({ children }) => {
-  const [rotate, setRotate] = useState(-1);
+  const [reverseIndex, setReverseIndex] = useState(-1);
 
-  const playRotate = (row: number) => {
-    setRotate(row);
+  const playReverse = (row: number) => {
+    setReverseIndex(row);
     setTimeout(() => {
-      setRotate(-1);
-    }, rotateTime);
+      setReverseIndex(-1);
+    }, reverseDurationMs * commonCardCounts);
   };
 
   return (
     <AnimationContext.Provider
       value={{
-        rotate,
-        playRotate,
+        reverseIndex,
+        playReverse,
       }}
     >
       {children}

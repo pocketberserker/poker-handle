@@ -45,7 +45,7 @@ export const GameBoard: React.FC<Props> = ({
 }) => {
   const { showMessage } = useMessage();
   const { showCorrectAnswer } = useCorrectAnswer();
-  const { rotate, playRotate } = useAnimation();
+  const { reverseIndex, playReverse } = useAnimation();
 
   const allHands = useMemo(
     () => [...board.player, ...board.opponents.flat()],
@@ -162,7 +162,7 @@ export const GameBoard: React.FC<Props> = ({
     let finish = complete || count >= maxTrials;
     setFinished(finish);
 
-    playRotate(current);
+    playReverse(current);
   };
 
   const handleEnter = () => {
@@ -176,11 +176,11 @@ export const GameBoard: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    if (rotate === -1 && finished === false) {
+    if (reverseIndex === -1 && finished === false) {
       setDiff(tmpDiff);
       setChecking(false);
     }
-  }, [rotate, finished, tmpDiff]);
+  }, [reverseIndex, finished, tmpDiff]);
 
   return (
     <GameBoardLayout
