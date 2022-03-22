@@ -37,12 +37,14 @@ const SettingBox: React.FC<SettingBoxProps> = ({ name, init, change }) => {
 
 const Box = styled.div`
   margin-top: 20px;
-  width: 80%;
+  width: 100%;
   display: flex;
   flex-direction: column;
+  align-items: center;
 `;
 
 const BoxContent = styled.div`
+  width: 90%;
   display: flex;
   justify-content: space-between;
   align-items: center;
