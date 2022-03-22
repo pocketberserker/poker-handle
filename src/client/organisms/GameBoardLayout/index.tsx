@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import { useMobile } from "../../hooks/MediaQuery";
+import { useAnimation } from "../../hooks/Animation";
 import { Card } from "../../../poker";
 import { Guess, Diff } from "../../guess";
 import { InputPanel } from "../../organisms/InputPanel";
@@ -37,6 +38,7 @@ export const GameBoardLayout: React.FC<Props> = ({
   onFinish,
 }) => {
   const { isMobile } = useMobile();
+  const { reverseIndex } = useAnimation();
 
   const [openResultDialog, setOpenResultDialog] = useState(false);
 
@@ -45,15 +47,14 @@ export const GameBoardLayout: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    if (finished) {
-      // TODO: animation
+    if (finished && reverseIndex === -1) {
       if (trials > maxTrials && completed === false) {
         showCorrectAnswer();
       }
       setOpenResultDialog(true);
       onFinish();
     }
-  }, [finished, trials, completed]);
+  }, [finished, trials, completed, reverseIndex]);
 
   if (isMobile) {
     return (
