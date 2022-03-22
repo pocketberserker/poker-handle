@@ -1,12 +1,14 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import format from "date-fns/format";
 
 import { maxTrials } from "../src/client/constants/meta";
 import * as poker from "../src/client/generator";
 import { Guess } from "../src/client/guess";
+import { useSettings } from "../src/client/hooks/Settings";
+import { ThemeContext } from "../src/client/hooks/Theme";
 import { HomeTemplate } from "../src/client/templates/HomeTemplate";
 
 const genGuesses = (): Guess[][] =>
@@ -22,6 +24,8 @@ const alreadyAnswered = (guesses: Guess[][]): boolean => {
 
 const Home: NextPage = () => {
   const router = useRouter();
+  const { setColorMode } = useContext(ThemeContext);
+  const { settings } = useSettings();
   const [guesses, setGuesses] = useState(genGuesses());
   const [board, setBoard] = useState<poker.Board | null>(null);
 
@@ -39,6 +43,11 @@ const Home: NextPage = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.isReady]);
+
+  useEffect(() => {
+    setColorMode(settings.theme);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [settings.theme]);
 
   if (!board) {
     return <div></div>;

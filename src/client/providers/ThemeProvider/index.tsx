@@ -18,16 +18,14 @@ export const ThemeProvider: React.FC<Props> = ({ children }) => {
 
   const colorMode = useMemo(
     () => ({
-      setColorMode: () => {
-        setMode((prevMode: ColorMode) =>
-          prevMode === "light" ? "dark" : "light"
-        );
+      setColorMode: (mode: ColorMode) => {
+        setMode(mode);
       },
     }),
     []
   );
 
-  const theme = React.useMemo(
+  const theme = useMemo(
     () =>
       createTheme({
         palette: {
@@ -40,6 +38,20 @@ export const ThemeProvider: React.FC<Props> = ({ children }) => {
         },
         wordle,
         extras,
+        components: {
+          MuiSwitch: {
+            styleOverrides: {
+              switchBase: {
+                "&.Mui-checked": {
+                  color: wordle.correct,
+                },
+                "&.Mui-checked+.MuiSwitch-track": {
+                  backgroundColor: wordle.correct,
+                },
+              },
+            },
+          },
+        },
       }),
     [mode]
   );
