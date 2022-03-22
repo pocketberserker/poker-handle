@@ -38,7 +38,7 @@ export const GameBoardLayout: React.FC<Props> = ({
   onFinish,
 }) => {
   const { isMobile } = useMobile();
-  const { reverseIndex } = useAnimation();
+  const { reversing } = useAnimation();
 
   const [openResultDialog, setOpenResultDialog] = useState(false);
 
@@ -47,14 +47,14 @@ export const GameBoardLayout: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    if (finished && reverseIndex === -1) {
+    if (finished && reversing === false) {
       if (trials > maxTrials && completed === false) {
         showCorrectAnswer();
       }
       setOpenResultDialog(true);
       onFinish();
     }
-  }, [finished, trials, completed, reverseIndex]);
+  }, [finished, trials, completed, reversing]);
 
   if (isMobile) {
     return (

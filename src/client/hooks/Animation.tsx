@@ -7,12 +7,16 @@ import {
 
 export const AnimationContext = createContext<{
   reverseIndex: number;
+  reversing: boolean;
   shakeIndex: number;
+  shaking: boolean;
   playReverse: (row: number) => void;
   playShake: (row: number) => void;
 }>({
   reverseIndex: -1,
+  reversing: false,
   shakeIndex: -1,
+  shaking: false,
   playReverse: () => void 0,
   playShake: () => void 0,
 });
@@ -43,8 +47,10 @@ export const AnimationProvider: React.FC<Props> = ({ children }) => {
     <AnimationContext.Provider
       value={{
         reverseIndex,
+        reversing: reverseIndex !== -1,
         playReverse,
         shakeIndex,
+        shaking: shakeIndex !== -1,
         playShake,
       }}
     >
