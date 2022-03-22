@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { AppBar } from "../../molecules/AppBar";
+import { AppBar } from "../AppBar";
 import { Footer } from "../Footer";
 import { appName } from "../../constants/meta";
 

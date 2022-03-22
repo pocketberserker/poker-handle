@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Dialog as MuiDialog } from "@mui/material";
+import { Dialog as MuiDialog, Slide } from "@mui/material";
+import { TransitionProps } from "@mui/material/transitions";
 import styled from "@emotion/styled";
 import { useMobile } from "../../hooks/MediaQuery";
 import { CloseButton } from "../CloseButton";
@@ -7,11 +8,38 @@ import { CloseButton } from "../CloseButton";
 type Props = {
   open: boolean;
   children: React.ReactNode;
+  fullScreen?: boolean;
   close: () => void;
 };
 
-export const Dialog: React.FC<Props> = ({ open, children, close }) => {
+export const Dialog: React.FC<Props> = ({
+  open,
+  children,
+  fullScreen,
+  close,
+}) => {
   const { isMobile } = useMobile();
+
+  if (fullScreen) {
+    return (
+      <MuiDialog
+        PaperProps={{
+          style: {
+            alignItems: "center",
+          },
+        }}
+        TransitionComponent={Transition}
+        onClose={close}
+        open={open}
+        fullScreen
+      >
+        <FullScreenWrapper>
+          <ResizedCloseButton click={close} />
+          {children}
+        </FullScreenWrapper>
+      </MuiDialog>
+    );
+  }
 
   if (isMobile) {
     return (
@@ -34,6 +62,14 @@ export const Dialog: React.FC<Props> = ({ open, children, close }) => {
   );
 };
 
+const FullScreenWrapper = styled.div`
+  width: 370px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+`;
+
 const Wrapper = styled.div`
   min-width: 400px;
   position: relative;
@@ -54,3 +90,12 @@ const ResizedCloseButton = styled(CloseButton)`
   background: ${({ theme }) =>
     theme.palette.mode === "light" ? theme.extras.black : theme.extras.white};
 `;
+
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement<any, any>;
+  },
+  ref: React.Ref<unknown>
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
