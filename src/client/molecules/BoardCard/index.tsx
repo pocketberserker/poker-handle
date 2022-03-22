@@ -18,14 +18,14 @@ const height = 58;
 
 export const BoardCard: React.FC<Props> = ({ guess, row, index }) => {
   const { reverseIndex, shakeIndex } = useAnimation();
-  const [reversed, setReversed] = useState(false);
+  const [reverse, setReverse] = useState(false);
   const [opened, setOpened] = useState(false);
   const [shaked, setShaked] = useState(false);
 
   useEffect(() => {
     if (reverseIndex === row) {
       setTimeout(() => {
-        setReversed(true);
+        setReverse(true);
         setTimeout(() => setOpened(true), reverseDurationMs / 2);
       }, index * 160);
     }
@@ -55,7 +55,7 @@ export const BoardCard: React.FC<Props> = ({ guess, row, index }) => {
   return (
     <Wrapper
       blank={guess.kind === "blank"}
-      reversed={reversed}
+      reverse={reverse}
       opened={opened}
       shaked={shaked}
     >
@@ -116,7 +116,7 @@ const shakeAnimation = css`
 `;
 
 type WrapperProps = {
-  reversed: boolean;
+  reverse: boolean;
   opened: boolean;
   blank: boolean;
   shaked: boolean;
@@ -130,8 +130,8 @@ const Wrapper = styled.div<WrapperProps>`
   border-radius: 4px;
   ${({ blank, theme }) =>
     blank ? `border: 1.5px solid ${theme.wordle.border};` : ""}
-  ${({ reversed, opened }) =>
-    reversed && opened === false && firstReverseAnimation}
-  ${({ reversed, opened }) => reversed && opened && secondReverseAnimation}
+  ${({ reverse, opened }) =>
+    reverse && opened === false && firstReverseAnimation}
+  ${({ reverse, opened }) => reverse && opened && secondReverseAnimation}
   ${({ shaked }) => shaked && shakeAnimation}
 `;
