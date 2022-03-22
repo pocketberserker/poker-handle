@@ -1,12 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { Card } from "../Card";
-import {
-  AbsentOverlay,
-  PartialOverlay,
-  PartialRankOverlay,
-  CorrectOverlay,
-} from "../CardOverlay";
+import { CardOverlay } from "../CardOverlay";
 import * as poker from "../../../poker";
 
 type Props = {
@@ -38,10 +33,10 @@ export const CardButton: React.FC<Props> = ({
         click(card);
       }}
     >
-      {disabled && <AbsentOverlay />}
-      {correct && <CorrectOverlay />}
-      {partial && <PartialOverlay />}
-      {partialRank && <PartialRankOverlay />}
+      {disabled && <CardOverlay kind="absent" />}
+      {correct && <CardOverlay kind="correct" />}
+      {partial && <CardOverlay kind="partial" />}
+      {partialRank && <CardOverlay kind="partial-rank" />}
       <StyledCard
         card={card}
         reversed={disabled || correct || partial || partialRank}

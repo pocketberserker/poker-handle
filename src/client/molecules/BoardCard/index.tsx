@@ -2,12 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import { keyframes, css } from "@emotion/react";
 import { useAnimation } from "../../hooks/Animation";
-import {
-  AbsentOverlay,
-  PartialOverlay,
-  PartialRankOverlay,
-  CorrectOverlay,
-} from "../CardOverlay";
+import { CardOverlay } from "../CardOverlay";
 import { Card } from "../../molecules/Card";
 import { Guess } from "../../guess";
 import { reverseDurationMs } from "../../constants/meta";
@@ -47,16 +42,8 @@ export const BoardCard: React.FC<Props> = ({ guess, row, index }) => {
       />
     );
 
-    if (opened) {
-      if (guess.kind === "absent") {
-        overlay = <AbsentOverlay />;
-      } else if (guess.kind === "partial") {
-        overlay = <PartialOverlay />;
-      } else if (guess.kind === "partial-rank") {
-        overlay = <PartialRankOverlay />;
-      } else if (guess.kind === "correct") {
-        overlay = <CorrectOverlay />;
-      }
+    if (opened && guess.kind !== "entered") {
+      overlay = <CardOverlay kind={guess.kind} />;
     }
   }
 

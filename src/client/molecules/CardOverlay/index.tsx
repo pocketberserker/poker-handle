@@ -1,20 +1,20 @@
 import React from "react";
 import styled from "@emotion/styled";
+import { Guess, Blank, Entered } from "../../guess";
 
-export const AbsentOverlay: React.FC = () => {
+type Props = {
+  kind: Exclude<Exclude<Guess, Blank>, Entered>["kind"];
+};
+
+export const CardOverlay: React.FC<Props> = ({ kind }) => {
+  if (kind === "correct") {
+    return <Correct />;
+  } else if (kind === "partial") {
+    return <Partial />;
+  } else if (kind === "partial-rank") {
+    return <PartialRank />;
+  }
   return <Absent />;
-};
-
-export const CorrectOverlay: React.FC = () => {
-  return <Correct />;
-};
-
-export const PartialOverlay: React.FC = () => {
-  return <Partial />;
-};
-
-export const PartialRankOverlay: React.FC = () => {
-  return <PartialRank />;
 };
 
 const Overlay = styled.div`
