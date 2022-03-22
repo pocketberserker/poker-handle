@@ -5,7 +5,7 @@ import { useAnimation } from "../../hooks/Animation";
 import { CardOverlay } from "../CardOverlay";
 import { Card } from "../../molecules/Card";
 import { Guess } from "../../guess";
-import { reverseDurationMs } from "../../constants/meta";
+import { reverseDurationMs, shakeDurationMs } from "../../constants/meta";
 
 type Props = {
   guess: Guess;
@@ -17,9 +17,10 @@ const width = 40;
 const height = 58;
 
 export const BoardCard: React.FC<Props> = ({ guess, row, index }) => {
-  const { reverseIndex } = useAnimation();
+  const { reverseIndex, shakeIndex } = useAnimation();
   const [reversed, setReversed] = useState(false);
   const [opened, setOpened] = useState(false);
+  const [shaked, setShaked] = useState(false);
 
   useEffect(() => {
     if (reverseIndex === row) {
@@ -29,6 +30,10 @@ export const BoardCard: React.FC<Props> = ({ guess, row, index }) => {
       }, index * 160);
     }
   }, [reverseIndex, index]);
+
+  useEffect(() => {
+    setShaked(shakeIndex === row);
+  }, [shakeIndex, row]);
 
   let image = <div />;
   let overlay = <div />;
@@ -48,7 +53,12 @@ export const BoardCard: React.FC<Props> = ({ guess, row, index }) => {
   }
 
   return (
-    <Wrapper blank={guess.kind === "blank"} reversed={reversed} opened={opened}>
+    <Wrapper
+      blank={guess.kind === "blank"}
+      reversed={reversed}
+      opened={opened}
+      shaked={shaked}
+    >
       {overlay}
       {image}
     </Wrapper>
@@ -83,11 +93,36 @@ const secondReverseAnimation = css`
   animation: ${reverseDurationMs / 1000 / 2}s linear ${secondReverse} forwards;
 `;
 
-const Wrapper = styled.div<{
+const shake = keyframes`
+  8%, 41% {
+    transform: translateX(-4px);
+  }
+  25%, 58% {
+    transform: translateX(4px);
+  }
+  75% {
+    transform: translateX(-2px);
+  }
+  92% {
+    transform: translateX(2px);
+  }
+  0%, 100% {
+    transform: translateX(0);
+  }
+`;
+
+const shakeAnimation = css`
+  animation: ${shakeDurationMs / 1000}s linear ${shake} forwards;
+`;
+
+type WrapperProps = {
   reversed: boolean;
   opened: boolean;
   blank: boolean;
-}>`
+  shaked: boolean;
+};
+
+const Wrapper = styled.div<WrapperProps>`
   margin: 4px;
   width: ${width}px;
   height: ${height}px;
@@ -98,4 +133,5 @@ const Wrapper = styled.div<{
   ${({ reversed, opened }) =>
     reversed && opened === false && firstReverseAnimation}
   ${({ reversed, opened }) => reversed && opened && secondReverseAnimation}
+  ${({ shaked }) => shaked && shakeAnimation}
 `;

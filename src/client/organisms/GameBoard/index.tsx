@@ -45,7 +45,7 @@ export const GameBoard: React.FC<Props> = ({
 }) => {
   const { showMessage } = useMessage();
   const { showCorrectAnswer } = useCorrectAnswer();
-  const { reverseIndex, playReverse } = useAnimation();
+  const { reverseIndex, playReverse, shakeIndex, playShake } = useAnimation();
 
   const allHands = useMemo(
     () => [...board.player, ...board.opponents.flat()],
@@ -142,7 +142,7 @@ export const GameBoard: React.FC<Props> = ({
     const answers = matchTheAnswers(guesses[current], board.common);
     if (typeof answers === "string") {
       showMessage(answers);
-      setChecking(false);
+      playShake(current);
       return;
     }
 
@@ -181,6 +181,12 @@ export const GameBoard: React.FC<Props> = ({
       setChecking(false);
     }
   }, [reverseIndex, finished, tmpDiff]);
+
+  useEffect(() => {
+    if (shakeIndex === -1) {
+      setChecking(false);
+    }
+  }, [shakeIndex]);
 
   return (
     <GameBoardLayout
