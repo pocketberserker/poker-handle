@@ -37,7 +37,7 @@ const SettingBox: React.FC<SettingBoxProps> = ({ name, init, change }) => {
 
 const Box = styled.div`
   margin-top: 20px;
-  width: 100%;
+  width: 80%;
   display: flex;
   flex-direction: column;
 `;
