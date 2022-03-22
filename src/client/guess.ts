@@ -163,7 +163,7 @@ export const collectDiff = (
   }
 
   return {
-    absents: [...prev.absents, ...current.absents, ...absents],
+    absents: [...prev.absents, ...current.absents, ...absents, ...hands],
     corrects,
     partials,
     partialRanks: current.partialRanks,

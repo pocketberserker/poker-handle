@@ -63,12 +63,7 @@ export const GameBoard: React.FC<Props> = ({
     partials: pickCardsFromGuesses(init, "partial"),
     partialRanks: pickCardsFromGuesses(init, "partial-rank"),
   });
-  const [tmpDiff, setTmpDiff] = useState<Diff>({
-    absents: [],
-    corrects: [],
-    partials: [],
-    partialRanks: [],
-  });
+  const [tmpDiff, setTmpDiff] = useState<Diff>(diff);
   const [completed, setCompleted] = useState(
     diff.corrects.length === guesses[0].length
   );

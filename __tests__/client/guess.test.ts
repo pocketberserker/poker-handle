@@ -558,6 +558,14 @@ describe("Diff", () => {
           rank: "6",
           suit: "S",
         },
+        {
+          rank: "8",
+          suit: "C",
+        },
+        {
+          rank: "9",
+          suit: "C",
+        },
       ],
       corrects: [
         {
