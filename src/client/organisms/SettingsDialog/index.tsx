@@ -25,8 +25,7 @@ const SettingBox: React.FC<SettingBoxProps> = ({ name, init, change }) => {
       <BoxContent>
         <SettingTitle>{name}</SettingTitle>
         <Switch
-          defaultChecked
-          value={checked}
+          checked={checked}
           onChange={(e) => handleChange(e.target.checked)}
         />
       </BoxContent>
