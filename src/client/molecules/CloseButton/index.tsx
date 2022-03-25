@@ -25,5 +25,6 @@ const CloseIcon = styled(Close)`
   &:hover {
     background: ${({ theme }) =>
       theme.palette.mode === "light" ? theme.extras.white : theme.extras.black};
+    color: inherit;
   }
 `;
