@@ -25,7 +25,8 @@ export default class MyDocument extends Document {
       <Html lang="ja">
         <Head>
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-          <link rel="shortcut icon" href="/favicon.ico" />
+          <link rel="shortcut icon" href="favicon.ico" />
+          <link rel="apple-touch-icon" href="logo192.png" />
           <meta property="og:type" content="website" />
           <meta property="og:title" content={appName} />
         </Head>
