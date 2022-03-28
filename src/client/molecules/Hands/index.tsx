@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import * as poker from "../../../poker";
 import { Hand } from "../Hand";
 
-type Props = {
+export type Props = {
   name: string;
   cards: poker.Card[];
   category?: poker.Category;

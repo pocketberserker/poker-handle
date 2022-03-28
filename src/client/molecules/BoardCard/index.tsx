@@ -11,15 +11,22 @@ type Props = {
   guess: Guess;
   row: number;
   index: number;
+  width: number;
+  height: number;
+  explanationMode?: boolean;
 };
 
-const width = 40;
-const height = 58;
-
-export const BoardCard: React.FC<Props> = ({ guess, row, index }) => {
+export const BoardCard: React.FC<Props> = ({
+  guess,
+  row,
+  index,
+  width,
+  height,
+  explanationMode,
+}) => {
   const { reverseIndex, shakeIndex } = useAnimation();
-  const [reverse, setReverse] = useState(false);
-  const [opened, setOpened] = useState(false);
+  const [reverse, setReverse] = useState(explanationMode || false);
+  const [opened, setOpened] = useState(explanationMode || false);
   const [shaked, setShaked] = useState(false);
 
   useEffect(() => {
@@ -58,6 +65,8 @@ export const BoardCard: React.FC<Props> = ({ guess, row, index }) => {
       reverse={reverse}
       opened={opened}
       shaked={shaked}
+      width={width}
+      height={height}
     >
       {overlay}
       {image}
@@ -120,12 +129,14 @@ type WrapperProps = {
   opened: boolean;
   blank: boolean;
   shaked: boolean;
+  width: number;
+  height: number;
 };
 
 const Wrapper = styled.div<WrapperProps>`
   margin: 4px;
-  width: ${width}px;
-  height: ${height}px;
+  width: ${({ width }) => width}px;
+  height: ${({ height }) => height}px;
   position: relative;
   border-radius: 4px;
   ${({ blank, theme }) =>

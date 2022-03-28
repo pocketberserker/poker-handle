@@ -1,42 +1,14 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { BoardCard } from "../BoardCard";
+import { Guesses } from "../../molecules/Guesses";
 import { Guess } from "../../guess";
 import * as poker from "../../../poker";
 
-type AnswerProps = {
-  row: number;
-  guesses: Guess[];
-};
-
-const Answer: React.FC<AnswerProps> = ({ guesses, row }) => (
-  <AnswerItems>
-    {guesses.map((guess, i) => (
-      <BoardCard
-        key={
-          guess.kind === "blank"
-            ? `blank-${row}-${i}`
-            : poker.stringify(guess.card)
-        }
-        guess={guess}
-        row={row}
-        index={i}
-      />
-    ))}
-  </AnswerItems>
-);
-
-const AnswerItems = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-type BoardProps = {
+type Props = {
   guesses: Guess[][];
 };
 
-export const Board: React.FC<BoardProps> = ({ guesses }) => {
+export const Board: React.FC<Props> = ({ guesses }) => {
   return (
     <Container>
       {guesses.map((row, i) => {
@@ -46,7 +18,7 @@ export const Board: React.FC<BoardProps> = ({ guesses }) => {
           )
           .join(" ");
         return (
-          <Answer
+          <Guesses
             key={key === "    " ? `blank-${i}` : key}
             guesses={row}
             row={i}
