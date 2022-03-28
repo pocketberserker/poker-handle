@@ -19,7 +19,7 @@ const guessToSquare = (guess: Guess, light: boolean): string => {
   } else if (guess.kind === "partial-rank") {
     return "🟦";
   } else {
-    return "light" ? "⬜" : "⬛";
+    return light ? "⬜" : "⬛";
   }
 };
 
