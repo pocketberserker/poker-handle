@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
+import { useTranslation } from "react-i18next";
+import { useMessage } from "../../hooks/MessageSnackbar";
 import { useMobile } from "../../hooks/MediaQuery";
 import { useAnimation } from "../../hooks/Animation";
 import { Card } from "../../../poker";
@@ -39,6 +41,8 @@ export const GameBoardLayout: React.FC<Props> = ({
 }) => {
   const { isMobile } = useMobile();
   const { reversing } = useAnimation();
+  const { showMessage } = useMessage();
+  const { t } = useTranslation();
 
   const [openResultDialog, setOpenResultDialog] = useState(false);
 
@@ -50,6 +54,8 @@ export const GameBoardLayout: React.FC<Props> = ({
     if (finished && reversing === false) {
       if (trials > maxTrials && completed === false) {
         showCorrectAnswer();
+      } else {
+        showMessage(t("congratulations"));
       }
       setOpenResultDialog(true);
       onFinish();

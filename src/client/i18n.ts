@@ -8,6 +8,7 @@ type Translation = {
   duplicate: string;
   notEnouthCards: string;
   alreadyChecked: string;
+  congratulations: string;
   game: {
     you: string;
     opponent: string;
@@ -35,6 +36,7 @@ const resources: { [lang: string]: { translation: Translation } } = {
       duplicate: "Duplicate card",
       notEnouthCards: "Not enough cards",
       alreadyChecked: "Already checked (bug?)",
+      congratulations: "Congratulations!",
       game: {
         you: "you",
         opponent: "other",
@@ -61,6 +63,7 @@ const resources: { [lang: string]: { translation: Translation } } = {
       duplicate: "選択済みのカードです",
       notEnouthCards: "カードが足りません",
       alreadyChecked: "チェック済みです（バグかも？）",
+      congratulations: "クリアおめでとうございます！",
       game: {
         you: "あなた",
         opponent: "相手",
