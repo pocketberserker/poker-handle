@@ -300,10 +300,36 @@ const SpotDivider = styled(Divider)`
   border-color: ${({ theme }) => theme.palette.text.primary};
 `;
 
-export const HelpDialog: React.FC = () => {
-  const theme = useTheme();
+type HelpDialogProps = {
+  title: string;
+  introduction: React.ReactNode;
+  examples: {
+    title: string;
+    handValue: {
+      title: string;
+      description: string;
+    };
+    communityCards: {
+      title: string;
+      correct: React.ReactNode;
+      flop: React.ReactNode;
+      partial: React.ReactNode;
+      partialRank: React.ReactNode;
+      absent: React.ReactNode;
+    };
+  };
+  available: React.ReactNode;
+  inspired: React.ReactNode;
+};
+
+export const HelpDialog: React.FC<HelpDialogProps> = ({
+  title,
+  introduction,
+  examples,
+  available,
+  inspired,
+}) => {
   const [open, setOpen] = useState(false);
-  const light = theme.palette.mode === "light";
 
   const handleOpen = () => {
     setOpen(true);
@@ -319,36 +345,23 @@ export const HelpDialog: React.FC = () => {
         <HelpIcon />
       </IconButton>
       <Dialog open={open} close={handleClose} fullScreen>
-        <Title variant="h5">How to play</Title>
+        <Title variant="h5">{title}</Title>
         <ContentDivider margin={10} />
-        <Section>
-          <Explanation>
-            Guess the community cards in six tries so that you win.
-          </Explanation>
-          <Explanation>
-            Each guess must be "flop", "turn" and "river" cards. Hit the enter
-            button to submit.
-          </Explanation>
-          <Explanation>
-            After each guess, the color of the tiles will change to show how
-            close your guess was to the cards.
-          </Explanation>
-        </Section>
+        <Section>{introduction}</Section>
         <ContentDivider margin={0} />
-        <SectionTitle>Examples</SectionTitle>
-        <SubsectionTitle margin={5}>Hand Value</SubsectionTitle>
+        <SectionTitle>{examples.title}</SectionTitle>
+        <SubsectionTitle margin={5}>{examples.handValue.title}</SubsectionTitle>
         <Section>
           <PlayerList>
             {players.map((p) => (
               <StyledHands key={p.name} {...p} small />
             ))}
           </PlayerList>
-          <Explanation>
-            Your hand value is greater than or equal to "Straight" when the
-            opponent hand values are "One Pair", "One Pair" and "Straight".
-          </Explanation>
+          <Explanation>{examples.handValue.description}</Explanation>
         </Section>
-        <SubsectionTitle margin={0}>Community Cards</SubsectionTitle>
+        <SubsectionTitle margin={0}>
+          {examples.communityCards.title}
+        </SubsectionTitle>
         <Section>
           <StyledGuesses guesses={correctFlop} row={0} explanationMode />
           <Spots>
@@ -356,51 +369,20 @@ export const HelpDialog: React.FC = () => {
             <Spot name="turn" width={40} />
             <Spot name="river" width={40} />
           </Spots>
-          <Explanation>
-            The card "T{suitLabel("S", light)}" is in the community cards and in
-            the correct spot.
-          </Explanation>
+          {examples.communityCards.correct}
           <Guesses guesses={nonOrderedFlop} row={0} explanationMode />
-          <Explanation>
-            the "flop" spots are in no particular order.
-          </Explanation>
+          {examples.communityCards.flop}
           <Guesses guesses={partial} row={0} explanationMode />
-          <Explanation>
-            The card "Q{suitLabel("S", light)}" is in the community cards but in
-            the wrong spot.
-          </Explanation>
+          {examples.communityCards.partial}
           <Guesses guesses={partialRank} row={0} explanationMode />
-          <Explanation>
-            The card "T{suitLabel("H", light)}" is not in the community cards.
-            But the other "T" suit card is in them.
-          </Explanation>
+          {examples.communityCards.partialRank}
           <Guesses guesses={absent} row={0} explanationMode />
-          <Explanation>
-            The card "9{suitLabel("D", light)}" is not in the community cards in
-            any spot.
-          </Explanation>
+          {examples.communityCards.absent}
         </Section>
         <ContentDivider margin={0} />
-        <Section>
-          <Explanation>
-            A new <PokerHandle>Poker Handle</PokerHandle> will be available
-            every day!
-          </Explanation>
-        </Section>
+        <Section>{available}</Section>
         <ContentDivider margin={0} />
-        <Section>
-          <Explanation>
-            <PokerHandle>Poker Handle</PokerHandle> has been heavily inspired by{" "}
-            <Link
-              href="https://www.nytimes.com/games/wordle/index.html"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Wordle
-            </Link>
-            .
-          </Explanation>
-        </Section>
+        <Section>{inspired}</Section>
         <ContentDivider margin={0} />
         <Section>
           <Explanation>
@@ -410,7 +392,7 @@ export const HelpDialog: React.FC = () => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              pocketberserker
+              @pocketberserker
             </Link>
           </Explanation>
         </Section>
@@ -478,3 +460,88 @@ const Spots = styled.div`
 const Link = styled.a`
   text-decoration: underline;
 `;
+
+export const HelpDialogEn: React.FC = () => {
+  const theme = useTheme();
+  const light = theme.palette.mode === "light";
+
+  return (
+    <HelpDialog
+      title="How to play"
+      introduction={
+        <>
+          <Explanation>
+            Guess the community cards in six tries so that you win.
+          </Explanation>
+          <Explanation>
+            Each guess must be "flop", "turn" and "river" cards. Hit the enter
+            button to submit.
+          </Explanation>
+          <Explanation>
+            After each guess, the color of the tiles will change to show how
+            close your guess was to the cards.
+          </Explanation>
+        </>
+      }
+      examples={{
+        title: "Examples",
+        handValue: {
+          title: "Hand Value",
+          description: `Your hand value is greater than or equal to "Straight" when the
+opponent hand values are "One Pair", "One Pair" and "Straight".`,
+        },
+        communityCards: {
+          title: "Community Cards",
+          correct: (
+            <Explanation>
+              The card "T{suitLabel("S", light)}" is in the community cards and
+              in the correct spot.
+            </Explanation>
+          ),
+          flop: (
+            <Explanation>
+              the "flop" spots are in no particular order.
+            </Explanation>
+          ),
+          partial: (
+            <Explanation>
+              The card "Q{suitLabel("S", light)}" is in the community cards but
+              in the wrong spot.
+            </Explanation>
+          ),
+          partialRank: (
+            <Explanation>
+              The card "T{suitLabel("H", light)}" is not in the community cards.
+              But the other "T" suit card is in them.
+            </Explanation>
+          ),
+          absent: (
+            <Explanation>
+              The card "9{suitLabel("D", light)}" is not in the community cards
+              in any spot.
+            </Explanation>
+          ),
+        },
+      }}
+      available={
+        <Explanation>
+          A new <PokerHandle>Poker Handle</PokerHandle> will be available every
+          day!
+        </Explanation>
+      }
+      inspired={
+        <Explanation>
+          <PokerHandle>Poker Handle</PokerHandle> has been heavily inspired by{" "}
+          <Link
+            href="https://www.nytimes.com/games/wordle/index.html"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Wordle
+          </Link>
+          .
+        </Explanation>
+      }
+    />
+  );
+};
