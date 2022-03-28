@@ -8,6 +8,7 @@ import { Guess } from "../../guess";
 
 type Props = {
   guesses: Guess[][];
+  hashtag: string;
   className?: string;
 };
 
@@ -23,7 +24,11 @@ const guessToSquare = (guess: Guess, light: boolean): string => {
   }
 };
 
-export const ShareButton: React.FC<Props> = ({ guesses, className }) => {
+export const ShareButton: React.FC<Props> = ({
+  guesses,
+  hashtag,
+  className,
+}) => {
   const { showMessage } = useMessage();
   const theme = useTheme();
   const { t } = useTranslation();
@@ -34,7 +39,7 @@ export const ShareButton: React.FC<Props> = ({ guesses, className }) => {
     );
     const guessCount = count === -1 ? "X" : count + 1;
 
-    const title = `#Poker_Handle ${guessCount}/6`;
+    const title = `${hashtag} ${guessCount}/6`;
     const guessString = guesses
       .filter((row) =>
         row.every((guess) => guess.kind !== "blank" && guess.kind !== "entered")

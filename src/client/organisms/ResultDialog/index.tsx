@@ -92,7 +92,7 @@ export const ResultDialog: React.FC<ResultDialogProps> = ({
             close();
           }}
         />
-        <StyledShareButton guesses={guesses} />
+        <StyledShareButton guesses={guesses} hashtag="#Poker_Handle" />
       </ResultDialogContainer>
     </Dialog>
   );
