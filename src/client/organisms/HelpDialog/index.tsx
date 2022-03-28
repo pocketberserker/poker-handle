@@ -471,15 +471,20 @@ export const HelpDialogEn: React.FC = () => {
       introduction={
         <>
           <Explanation>
-            Guess the community cards in six tries so that you win.
+            Guess the community cards in six or less tries.
           </Explanation>
           <Explanation>
-            Each guess must be "flop", "turn" and "river" cards. Hit the enter
-            button to submit.
+            The value of your opponents hands for the correct answer is shown,
+            and the answer is always so that you have the winning hand of the
+            table.
           </Explanation>
           <Explanation>
-            After each guess, the color of the tiles will change to show how
-            close your guess was to the cards.
+            For each guess, select the respective "flop", "turn" and "river"
+            cards. Hit the enter button to submit.
+          </Explanation>
+          <Explanation>
+            After each guess, the color of the tiles will change to show you how
+            close to the answer your guess was.
           </Explanation>
         </>
       }
@@ -487,8 +492,7 @@ export const HelpDialogEn: React.FC = () => {
         title: "Examples",
         handValue: {
           title: "Hand Value",
-          description: `Your hand value is greater than or equal to "Straight" when the
-opponent hand values are "One Pair", "One Pair" and "Straight".`,
+          description: `Your hand value is greater than or equal to "Straight" when the opponents hand value are "One Pair", "One Pair" and "Straight".`,
         },
         communityCards: {
           title: "Community Cards",
@@ -512,13 +516,13 @@ opponent hand values are "One Pair", "One Pair" and "Straight".`,
           partialRank: (
             <Explanation>
               The card "T{suitLabel("H", light)}" is not in the community cards.
-              But the other "T" suit card is in them.
+              But a "T" card of another suit is in them.
             </Explanation>
           ),
           absent: (
             <Explanation>
-              The card "9{suitLabel("D", light)}" is not in the community cards
-              in any spot.
+              Neither the card "9{suitLabel("D", light)}" or any "9" card are in
+              the community cards (in any spot).
             </Explanation>
           ),
         },
