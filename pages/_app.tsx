@@ -3,6 +3,7 @@ import Head from "next/head";
 import React from "react";
 
 import "sanitize.css";
+import "../src/client/i18n";
 
 import { appName } from "../src/client/constants/meta";
 import { AnimationProvider } from "../src/client/hooks/Animation";

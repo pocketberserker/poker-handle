@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useMessage } from "../../hooks/MessageSnackbar";
 import { useCorrectAnswer } from "../../hooks/CorrectAnswerSnackbar";
 import { useAnimation } from "../../hooks/Animation";
@@ -46,6 +47,7 @@ export const GameBoard: React.FC<Props> = ({
   const { showMessage } = useMessage();
   const { showCorrectAnswer } = useCorrectAnswer();
   const { reversing, playReverse, shaking, playShake } = useAnimation();
+  const { t } = useTranslation();
 
   const allHands = useMemo(
     () => [...board.player, ...board.opponents.flat()],
@@ -96,7 +98,7 @@ export const GameBoard: React.FC<Props> = ({
         (s) => s.kind === "entered" && poker.equalsCard(s.card, card)
       )
     ) {
-      showMessage("Duplicate card");
+      showMessage(t("duplicate"));
       return;
     }
 
@@ -134,7 +136,7 @@ export const GameBoard: React.FC<Props> = ({
   };
 
   const checkAnswer = async (current: number, count: number) => {
-    const answers = matchTheAnswers(guesses[current], board.common);
+    const answers = matchTheAnswers(guesses[current], board.common, t);
     if (typeof answers === "string") {
       showMessage(answers);
       playShake(current);
@@ -189,7 +191,7 @@ export const GameBoard: React.FC<Props> = ({
         <>
           <HandsArea
             members={(
-              [{ name: "you", cards: board.player }] as {
+              [{ name: t("game.you"), cards: board.player }] as {
                 name: string;
                 cards: [poker.Card, poker.Card];
                 category?: poker.Category;
@@ -199,7 +201,7 @@ export const GameBoard: React.FC<Props> = ({
                 ? []
                 : [
                     {
-                      name: "other1",
+                      name: `${t("game.opponent")}1`,
                       cards: board.opponents[0],
                       category: opponentCategories[0],
                     },
@@ -214,7 +216,7 @@ export const GameBoard: React.FC<Props> = ({
               .map((cards, i) => {
                 const offset = board.opponents.length === 1 ? 0 : 1;
                 return {
-                  name: `other${i + offset + 1}`,
+                  name: `${t("game.opponent")}${i + offset + 1}`,
                   cards,
                   category: opponentCategories[i + offset],
                 };

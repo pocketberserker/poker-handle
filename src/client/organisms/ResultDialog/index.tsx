@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import Countdown from "react-countdown";
 import { Dialog } from "../../molecules/Dialog";
 import { Button } from "../../atoms/Button";
@@ -20,6 +21,7 @@ type CountdownNextPokerProps = {
 };
 
 const CountdownNextPoker: React.FC<CountdownNextPokerProps> = ({ play }) => {
+  const { t } = useTranslation();
   const [ended, setEnded] = useState(false);
 
   const now = new Date();
@@ -31,9 +33,9 @@ const CountdownNextPoker: React.FC<CountdownNextPokerProps> = ({ play }) => {
 
   return (
     <CountdownContainer>
-      <Typography variant="h5">Next Poker</Typography>
+      <Typography variant="h5">{t("game.result.next")}</Typography>
       {ended ? (
-        <PlayButton click={play}>Play Now!</PlayButton>
+        <PlayButton click={play}>{t("game.result.play")}</PlayButton>
       ) : (
         <StyledCountdown
           date={tomorrow}

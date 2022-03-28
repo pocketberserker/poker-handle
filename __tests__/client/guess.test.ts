@@ -364,7 +364,8 @@ describe("Answers", () => {
       expect(
         matchTheAnswers(
           input.split(" ").map((c) => ({ kind: "entered", card: parse(c) })),
-          common.split(" ").map((c) => parse(c))
+          common.split(" ").map((c) => parse(c)),
+          () => ""
         )
       ).toEqual(expected);
     }
@@ -508,7 +509,8 @@ describe("Diff", () => {
         },
         matchTheAnswers(
           input.split(" ").map((c) => ({ kind: "entered", card: parse(c) })),
-          common.split(" ").map((c) => parse(c))
+          common.split(" ").map((c) => parse(c)),
+          () => ""
         ) as Answers,
         [].map((c) => parse(c))
       )
@@ -528,7 +530,8 @@ describe("Diff", () => {
           "2C 3C 4C 5C 6C"
             .split(" ")
             .map((c) => ({ kind: "entered", card: parse(c) })),
-          "2C 3C 4C 5C 7C".split(" ").map((c) => parse(c))
+          "2C 3C 4C 5C 7C".split(" ").map((c) => parse(c)),
+          () => ""
         ) as Answers,
         ["8C", "9C"].map((c) => parse(c))
       )

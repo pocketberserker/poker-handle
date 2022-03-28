@@ -49,7 +49,8 @@ const checkCorrect = (common: Card[], target: Card, index: number): boolean => {
 
 export const matchTheAnswers = (
   input: Guess[],
-  common: Card[]
+  common: Card[],
+  t: (key: string) => string
 ): Answers | string => {
   const guesses: Guess[] = [];
   const absents: Card[] = [];
@@ -59,9 +60,9 @@ export const matchTheAnswers = (
 
   for (const [i, s] of input.entries()) {
     if (s.kind === "blank") {
-      return "Not enough cards";
+      return t("notEnoughCards");
     } else if (s.kind !== "entered") {
-      return "Already checked (bug?)";
+      return t("alreadyChecked");
     }
 
     let kind: "correct" | "absent" | "partial" = "absent";

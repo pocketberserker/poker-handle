@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import styled from "@emotion/styled";
 import { useTheme } from "@mui/material/styles";
+import { useTranslation } from "react-i18next";
 import { Button } from "../../atoms/Button";
 import { useMessage } from "../../hooks/MessageSnackbar";
 import { Guess } from "../../guess";
@@ -25,6 +26,7 @@ const guessToSquare = (guess: Guess, light: boolean): string => {
 export const ShareButton: React.FC<Props> = ({ guesses, className }) => {
   const { showMessage } = useMessage();
   const theme = useTheme();
+  const { t } = useTranslation();
 
   const shareText = useMemo(() => {
     const count = guesses.findIndex((row) =>
@@ -52,10 +54,10 @@ export const ShareButton: React.FC<Props> = ({ guesses, className }) => {
       className={className}
       click={() => {
         navigator.clipboard.writeText(shareText);
-        showMessage("Copied results to clipboard");
+        showMessage(t("copy"));
       }}
     >
-      Share
+      {t("share")}
     </CopyButton>
   );
 };

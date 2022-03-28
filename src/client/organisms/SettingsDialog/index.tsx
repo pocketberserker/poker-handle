@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import styled from "@emotion/styled";
 import { Divider, IconButton, Typography, Switch } from "@mui/material";
 import { Settings } from "@mui/icons-material";
+import { useTranslation } from "react-i18next";
 import { ThemeContext } from "../../hooks/Theme";
 import { Dialog } from "../../molecules/Dialog";
 import { useSettings } from "../../hooks/Settings";
@@ -60,6 +61,7 @@ const SettingDivider = styled(Divider)`
 type SettingsProps = {};
 
 export const SettingsDialog: React.FC<SettingsProps> = ({}) => {
+  const { t } = useTranslation();
   const { settings, updateSettings } = useSettings();
   const { setColorMode } = useContext(ThemeContext);
   const [open, setOpen] = useState(false);
@@ -86,9 +88,9 @@ export const SettingsDialog: React.FC<SettingsProps> = ({}) => {
         <SettingsIcon />
       </IconButton>
       <Dialog open={open} close={handleClose} fullScreen>
-        <Title variant="h5">Settings</Title>
+        <Title variant="h5">{t("settings.title")}</Title>
         <SettingBox
-          name="Dark Mode"
+          name={t("settings.darkMode")}
           init={settings.theme === "dark"}
           change={handleChangeTheme}
         />

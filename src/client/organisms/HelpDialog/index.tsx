@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import { Divider, IconButton, Typography } from "@mui/material";
 import { Help } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
+import { useTranslation } from "react-i18next";
 import { Dialog } from "../../molecules/Dialog";
 import { Hands, Props as HandsProps } from "../../molecules/Hands";
 import { Guesses } from "../../molecules/Guesses";
@@ -24,7 +25,7 @@ const players: HandsProps[] = [
     ],
   },
   {
-    name: "other1",
+    name: "1",
     cards: [
       {
         rank: "5",
@@ -38,7 +39,7 @@ const players: HandsProps[] = [
     category: "One Pair",
   },
   {
-    name: "other2",
+    name: "2",
     cards: [
       {
         rank: "3",
@@ -52,7 +53,7 @@ const players: HandsProps[] = [
     category: "One Pair",
   },
   {
-    name: "other3",
+    name: "3",
     cards: [
       {
         rank: "A",
@@ -284,10 +285,10 @@ export const Spot: React.FC<SpotProps> = ({ name, width }) => (
 
 const SpotContainer = styled.div<{ width: number }>`
   width: ${({ width }) => width}px;
+  height: 45px;
   margin: 0 4px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 `;
 
@@ -309,6 +310,9 @@ type HelpDialogProps = {
       title: string;
       description: string;
     };
+    flop: string;
+    turn: string;
+    river: string;
     communityCards: {
       title: string;
       correct: React.ReactNode;
@@ -329,6 +333,7 @@ export const HelpDialog: React.FC<HelpDialogProps> = ({
   available,
   inspired,
 }) => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
@@ -354,7 +359,16 @@ export const HelpDialog: React.FC<HelpDialogProps> = ({
         <Section>
           <PlayerList>
             {players.map((p) => (
-              <StyledHands key={p.name} {...p} small />
+              <StyledHands
+                key={p.name}
+                {...p}
+                name={
+                  p.name === "you"
+                    ? t("game.you")
+                    : `${t("game.opponent")}${p.name}`
+                }
+                small
+              />
             ))}
           </PlayerList>
           <Explanation>{examples.handValue.description}</Explanation>
@@ -365,9 +379,9 @@ export const HelpDialog: React.FC<HelpDialogProps> = ({
         <Section>
           <StyledGuesses guesses={correctFlop} row={0} explanationMode />
           <Spots>
-            <Spot name="flop" width={136} />
-            <Spot name="turn" width={40} />
-            <Spot name="river" width={40} />
+            <Spot name={examples.flop} width={136} />
+            <Spot name={examples.turn} width={40} />
+            <Spot name={examples.river} width={40} />
           </Spots>
           {examples.communityCards.correct}
           <Guesses guesses={nonOrderedFlop} row={0} explanationMode />
@@ -463,6 +477,7 @@ const Link = styled.a`
 
 export const HelpDialogEn: React.FC = () => {
   const theme = useTheme();
+  const { t } = useTranslation();
   const light = theme.palette.mode === "light";
 
   return (
@@ -479,8 +494,9 @@ export const HelpDialogEn: React.FC = () => {
             table.
           </Explanation>
           <Explanation>
-            For each guess, select the respective "flop", "turn" and "river"
-            cards. Hit the enter button to submit.
+            For each guess, select the respective "{t("poker.flop")}", "
+            {t("poker.turn")}" and "{t("poker.river")}" cards. Hit the enter
+            button to submit.
           </Explanation>
           <Explanation>
             After each guess, the color of the tiles will change to show you how
@@ -494,6 +510,9 @@ export const HelpDialogEn: React.FC = () => {
           title: "Hand Value",
           description: `Your hand value is greater than or equal to "Straight" when the opponents hand value are "One Pair", "One Pair" and "Straight".`,
         },
+        flop: t("poker.flop"),
+        turn: t("poker.turn"),
+        river: t("poker.river"),
         communityCards: {
           title: "Community Cards",
           correct: (
@@ -504,7 +523,7 @@ export const HelpDialogEn: React.FC = () => {
           ),
           flop: (
             <Explanation>
-              the "flop" spots are in no particular order.
+              the "{t("poker.flop")}" spots are in no particular order.
             </Explanation>
           ),
           partial: (
@@ -544,6 +563,94 @@ export const HelpDialogEn: React.FC = () => {
             Wordle
           </Link>
           .
+        </Explanation>
+      }
+    />
+  );
+};
+
+export const HelpDialogJa: React.FC = () => {
+  const theme = useTheme();
+  const { t } = useTranslation();
+  const light = theme.palette.mode === "light";
+
+  return (
+    <HelpDialog
+      title="あそびかた"
+      introduction={
+        <>
+          <Explanation>
+            コミュニティ・カードを6回以内に当ててください。
+          </Explanation>
+          <Explanation>
+            相手のハンドと役は表示されており、コミュニティ・カードは常にあなたが勝利するようになっています。
+          </Explanation>
+          <Explanation>
+            "{t("poker.flop")}"、"{t("poker.turn")}"、"{t("poker.river")}
+            "をそれぞれ推測して入力し、 エンターボタンを押して結果を確認します。
+          </Explanation>
+          <Explanation>
+            各推測後、タイルの色が変わり、あなたの推測が答えにどれだけ近かったかを表示します。
+          </Explanation>
+        </>
+      }
+      examples={{
+        title: "例",
+        handValue: {
+          title: "ハンド",
+          description: `相手のハンドが「ワンペア」「ワンペア」「ストレート」のとき、あなたの手札は「ストレート」以上です。`,
+        },
+        flop: t("poker.flop"),
+        turn: t("poker.turn"),
+        river: t("poker.river"),
+        communityCards: {
+          title: "コミュニティ・カード",
+          correct: (
+            <Explanation>
+              "T{suitLabel("S", light)}
+              "はコミュニティ・カードで、場所も正解です。
+            </Explanation>
+          ),
+          flop: (
+            <Explanation>"{t("poker.flop")}"は順序を問いません。</Explanation>
+          ),
+          partial: (
+            <Explanation>
+              "Q{suitLabel("S", light)}
+              "はコミュニティ・カードですが、場所が間違っています。
+            </Explanation>
+          ),
+          partialRank: (
+            <Explanation>
+              "T{suitLabel("H", light)}"はコミュニティ・カードではありません。
+              しかし、他の絵柄の"T"がコミュニティ・カードです。
+            </Explanation>
+          ),
+          absent: (
+            <Explanation>
+              "9{suitLabel("D", light)}
+              "を含む"9"カードは、コミュニティ・カードではありません。
+            </Explanation>
+          ),
+        },
+      }}
+      available={
+        <Explanation>
+          <PokerHandle>Poker Handle</PokerHandle>
+          は毎日新しい題材に挑戦できます！
+        </Explanation>
+      }
+      inspired={
+        <Explanation>
+          <PokerHandle>Poker Handle</PokerHandle>は
+          <Link
+            href="https://www.nytimes.com/games/wordle/index.html"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Wordle
+          </Link>
+          をすごく参考にしています。
         </Explanation>
       }
     />
