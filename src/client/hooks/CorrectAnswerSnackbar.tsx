@@ -58,7 +58,7 @@ export const CorrectAnswerSnackbarProvider: React.FC<Props> = ({
           <ResizedCloseButton click={handleClose} />
           <CardList>
             {correct.map((card) => (
-              <Card
+              <StyledCard
                 key={poker.stringify(card)}
                 card={card}
                 width={40}
@@ -110,6 +110,10 @@ const CardList = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const StyledCard = styled(Card)`
+  margin: 0 4px;
 `;
 
 const Categories = styled.div`
