@@ -118,6 +118,7 @@ export const StatsDialog: React.FC = () => {
           <Distribution>
             {Object.entries(distribution).map(([index, count]) => (
               <DistributionItem
+                key={index}
                 index={index}
                 count={count}
                 max={maxDistribution}
