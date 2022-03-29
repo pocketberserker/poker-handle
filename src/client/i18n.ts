@@ -26,6 +26,14 @@ type Translation = {
     turn: string;
     river: string;
   };
+  stats: {
+    title: string;
+    played: string;
+    win: string;
+    currentStreak: string;
+    maxStreak: string;
+    distribution: string;
+  };
 };
 
 const resources: { [lang: string]: { translation: Translation } } = {
@@ -54,6 +62,14 @@ const resources: { [lang: string]: { translation: Translation } } = {
         turn: "turn",
         river: "river",
       },
+      stats: {
+        title: "Statistics",
+        played: "Played",
+        win: "Win %",
+        currentStreak: "Current Streak",
+        maxStreak: "Max Streak",
+        distribution: "Guess Distribution",
+      },
     },
   },
   ja: {
@@ -80,6 +96,14 @@ const resources: { [lang: string]: { translation: Translation } } = {
         flop: "フロップ",
         turn: "ターン",
         river: "リバー",
+      },
+      stats: {
+        title: "統計",
+        played: "プレイ回数",
+        win: "Win %",
+        currentStreak: "連続成功数",
+        maxStreak: "最大連続成功数",
+        distribution: "分布",
       },
     },
   },

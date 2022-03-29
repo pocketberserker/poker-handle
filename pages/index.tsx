@@ -2,9 +2,8 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import React, { useState, useEffect, useContext, useMemo } from "react";
 
-import format from "date-fns/format";
-
 import { maxTrials, debugMode } from "../src/client/constants/meta";
+import { nowString } from "../src/client/datetime";
 import * as poker from "../src/client/generator";
 import {
   Guess,
@@ -17,8 +16,6 @@ import { HomeTemplate } from "../src/client/templates/HomeTemplate";
 
 const genGuesses = (): Guess[][] =>
   Array(maxTrials).fill(Array(5).fill({ kind: "blank" }));
-
-const nowString = (): string => format(new Date(), "yyyy-MM-dd");
 
 const alreadyAnswered = (guesses: Guess[][]): boolean => {
   const last = guesses[guesses.length - 1];
