@@ -17,6 +17,7 @@ type Props = {
   trials: number;
   finished: boolean;
   completed: boolean;
+  debug: boolean;
   play: () => void;
   handleSelect: (card: Card) => void;
   handleBackspace: () => void;
@@ -32,6 +33,7 @@ export const GameBoardLayout: React.FC<Props> = ({
   trials,
   finished,
   completed,
+  debug,
   play,
   handleSelect,
   handleBackspace,

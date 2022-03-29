@@ -170,3 +170,22 @@ export const collectDiff = (
     partialRanks: current.partialRanks,
   };
 };
+
+export const loadFromLocalStorage = (): Record<string, Guess[][]> => {
+  if (typeof localStorage === "undefined") {
+    return {};
+  }
+
+  const stored = localStorage.getItem("guesses");
+  return stored != null ? JSON.parse(stored) : {};
+};
+
+export const saveToLocalStorage = (dayString: string, guesses: Guess[][]) => {
+  localStorage.setItem(
+    "guesses",
+    JSON.stringify({
+      ...loadFromLocalStorage(),
+      [dayString]: guesses,
+    })
+  );
+};

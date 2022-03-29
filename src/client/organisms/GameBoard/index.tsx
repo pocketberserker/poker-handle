@@ -15,7 +15,9 @@ type Props = {
   board: BoardModel;
   init: Guess[][];
   alreadyAnswered: boolean;
+  debug: boolean;
   play: () => void;
+  save: (guesses: Guess[][]) => void;
 };
 
 const pickCardsFromGuesses = (
@@ -42,7 +44,9 @@ export const GameBoard: React.FC<Props> = ({
   board,
   init,
   alreadyAnswered,
+  debug,
   play,
+  save,
 }) => {
   const { showMessage } = useMessage();
   const { showCorrectAnswer } = useCorrectAnswer();
@@ -57,7 +61,7 @@ export const GameBoard: React.FC<Props> = ({
   const [guesses, setGuesses] = useState(init);
   const [trials, setTrials] = useState(alreadyAnswered ? maxTrials + 1 : 1);
   const [column, setColumn] = useState(
-    alreadyAnswered ? init[init.length].length : 0
+    alreadyAnswered ? init[init.length - 1].length : 0
   );
   const [diff, setDiff] = useState<Diff>({
     absents: allHands,
@@ -146,6 +150,7 @@ export const GameBoard: React.FC<Props> = ({
     const next = [...guesses];
     next[current] = answers.guesses;
     setGuesses(next);
+    save(next);
 
     setTmpDiff((prev) =>
       collectDiff(prev, answers, [...board.player, ...allHands])
@@ -230,6 +235,7 @@ export const GameBoard: React.FC<Props> = ({
       trials={trials}
       finished={finished}
       completed={completed}
+      debug={debug}
       play={play}
       handleSelect={handleSelect}
       handleBackspace={handleBackspace}

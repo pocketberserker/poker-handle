@@ -1,12 +1,16 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useMemo } from "react";
 
 import format from "date-fns/format";
 
-import { maxTrials } from "../src/client/constants/meta";
+import { maxTrials, debugMode } from "../src/client/constants/meta";
 import * as poker from "../src/client/generator";
-import { Guess } from "../src/client/guess";
+import {
+  Guess,
+  loadFromLocalStorage,
+  saveToLocalStorage,
+} from "../src/client/guess";
 import { useSettings } from "../src/client/hooks/Settings";
 import { ThemeContext } from "../src/client/hooks/Theme";
 import { HomeTemplate } from "../src/client/templates/HomeTemplate";
@@ -28,13 +32,36 @@ const Home: NextPage = () => {
   const { settings } = useSettings();
   const [guesses, setGuesses] = useState(genGuesses());
   const [board, setBoard] = useState<poker.Board | null>(null);
+  const [now, setNow] = useState(nowString());
+
+  const isDebug = useMemo(
+    () =>
+      debugMode || (router.isReady && typeof router.query.seed === "string"),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [router.isReady]
+  );
 
   const play = () => {
-    const next =
-      typeof router.query.seed === "string" ? router.query.seed : nowString();
     const opponents = router.query.opponents === "1" ? 1 : 3;
-    setGuesses(genGuesses());
-    setBoard(poker.generate(next, opponents));
+    if (typeof router.query.seed === "string") {
+      setGuesses(genGuesses());
+      setBoard(poker.generate(router.query.seed, opponents));
+    } else {
+      const now = nowString();
+
+      let newGuesses = genGuesses();
+      if (isDebug === false) {
+        newGuesses = loadFromLocalStorage()[now] ?? newGuesses;
+      }
+
+      setGuesses(newGuesses);
+      setBoard(poker.generate(now, opponents));
+      setNow(now);
+    }
+  };
+
+  const save = (guesses: Guess[][]) => {
+    saveToLocalStorage(now, guesses);
   };
 
   useEffect(() => {
@@ -58,7 +85,9 @@ const Home: NextPage = () => {
       board={board}
       init={guesses}
       alreadyAnswered={alreadyAnswered(guesses)}
+      debug={isDebug}
       play={play}
+      save={save}
     />
   );
 };
