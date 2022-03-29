@@ -7,14 +7,14 @@ import * as poker from "../../../poker";
 type Props = {
   row: number;
   guesses: Guess[];
-  explanationMode?: boolean;
+  immediately: boolean;
   className?: string;
 };
 
 export const Guesses: React.FC<Props> = ({
   guesses,
   row,
-  explanationMode,
+  immediately,
   className,
 }) => (
   <Items className={className}>
@@ -30,7 +30,7 @@ export const Guesses: React.FC<Props> = ({
         index={i}
         width={40}
         height={58}
-        explanationMode={explanationMode}
+        immediately={immediately}
       />
     ))}
   </Items>

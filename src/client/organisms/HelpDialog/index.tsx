@@ -377,20 +377,20 @@ export const HelpDialog: React.FC<HelpDialogProps> = ({
           {examples.communityCards.title}
         </SubsectionTitle>
         <Section>
-          <StyledGuesses guesses={correctFlop} row={0} explanationMode />
+          <StyledGuesses guesses={correctFlop} row={0} immediately />
           <Spots>
             <Spot name={examples.flop} width={136} />
             <Spot name={examples.turn} width={40} />
             <Spot name={examples.river} width={40} />
           </Spots>
           {examples.communityCards.correct}
-          <Guesses guesses={nonOrderedFlop} row={0} explanationMode />
+          <Guesses guesses={nonOrderedFlop} row={0} immediately />
           {examples.communityCards.flop}
-          <Guesses guesses={partial} row={0} explanationMode />
+          <Guesses guesses={partial} row={0} immediately />
           {examples.communityCards.partial}
-          <Guesses guesses={partialRank} row={0} explanationMode />
+          <Guesses guesses={partialRank} row={0} immediately />
           {examples.communityCards.partialRank}
-          <Guesses guesses={absent} row={0} explanationMode />
+          <Guesses guesses={absent} row={0} immediately />
           {examples.communityCards.absent}
         </Section>
         <ContentDivider margin={0} />

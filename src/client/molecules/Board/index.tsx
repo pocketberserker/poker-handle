@@ -6,9 +6,10 @@ import * as poker from "../../../poker";
 
 type Props = {
   guesses: Guess[][];
+  initialAnsweredRow: number;
 };
 
-export const Board: React.FC<Props> = ({ guesses }) => {
+export const Board: React.FC<Props> = ({ guesses, initialAnsweredRow }) => {
   return (
     <Container>
       {guesses.map((row, i) => {
@@ -22,6 +23,7 @@ export const Board: React.FC<Props> = ({ guesses }) => {
             key={key === "    " ? `blank-${i}` : key}
             guesses={row}
             row={i}
+            immediately={i <= initialAnsweredRow}
           />
         );
       })}

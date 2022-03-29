@@ -13,7 +13,7 @@ type Props = {
   index: number;
   width: number;
   height: number;
-  explanationMode?: boolean;
+  immediately?: boolean;
 };
 
 export const BoardCard: React.FC<Props> = ({
@@ -22,11 +22,11 @@ export const BoardCard: React.FC<Props> = ({
   index,
   width,
   height,
-  explanationMode,
+  immediately,
 }) => {
   const { reverseIndex, shakeIndex } = useAnimation();
-  const [reverse, setReverse] = useState(explanationMode || false);
-  const [opened, setOpened] = useState(explanationMode || false);
+  const [reverse, setReverse] = useState(immediately || false);
+  const [opened, setOpened] = useState(immediately || false);
   const [shaked, setShaked] = useState(false);
 
   useEffect(() => {

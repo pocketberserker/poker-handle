@@ -58,6 +58,14 @@ export const GameBoard: React.FC<Props> = ({
     [board]
   );
 
+  const initialLastAnsweredRow = useMemo(
+    () =>
+      Math.max(
+        ...init.map((row, i) => (row.every((g) => g.kind !== "blank") ? i : -1))
+      ),
+    [init]
+  );
+
   const [guesses, setGuesses] = useState(init);
   const [trials, setTrials] = useState(alreadyAnswered ? maxTrials + 1 : 1);
   const [column, setColumn] = useState(
@@ -214,7 +222,10 @@ export const GameBoard: React.FC<Props> = ({
             )}
             small={board.opponents.length > 1}
           />
-          <Board guesses={guesses} />
+          <Board
+            guesses={guesses}
+            initialAnsweredRow={initialLastAnsweredRow}
+          />
           <HandsArea
             members={board.opponents
               .slice(board.opponents.length === 1 ? 0 : 1)
