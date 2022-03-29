@@ -1,0 +1,23 @@
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+env:
+  node-version: "16"
+  NEXT_TELEMETRY_DISABLED: 1
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.node-version }}
+      - run: npm ci
+      - run: npm test
+      - run: npm run lint
+      - run: npm run build
