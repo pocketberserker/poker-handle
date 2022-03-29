@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { Dialog } from "../../molecules/Dialog";
 import { Hands, Props as HandsProps } from "../../molecules/Hands";
 import { Guesses } from "../../molecules/Guesses";
+import { ExternalLink } from "../../atoms/ExternalLink";
 import { Guess } from "../../guess";
 import { Suit } from "../../../poker";
 
@@ -276,7 +277,7 @@ type SpotProps = {
   width: number;
 };
 
-export const Spot: React.FC<SpotProps> = ({ name, width }) => (
+const Spot: React.FC<SpotProps> = ({ name, width }) => (
   <SpotContainer width={width}>
     <SpotDivider sx={{ borderBottomWidth: "medium" }} />
     <SpotName>{name}</SpotName>
@@ -401,13 +402,9 @@ export const HelpDialog: React.FC<HelpDialogProps> = ({
         <Section>
           <Explanation>
             Created by{" "}
-            <Link
-              href="https://twitter.com/pocketberserker"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <ExternalLink href="https://twitter.com/pocketberserker">
               @pocketberserker
-            </Link>
+            </ExternalLink>
           </Explanation>
         </Section>
       </Dialog>
@@ -471,9 +468,15 @@ const Spots = styled.div`
   align-items: center;
 `;
 
-const Link = styled.a`
-  text-decoration: underline;
-`;
+const Wordle: React.FC = () => (
+  <ExternalLink href="https://www.nytimes.com/games/wordle/index.html">
+    Wordle
+  </ExternalLink>
+);
+
+const Worldle: React.FC = () => (
+  <ExternalLink href="https://worldle.teuteuf.fr/">Worldle</ExternalLink>
+);
 
 export const HelpDialogEn: React.FC = () => {
   const theme = useTheme();
@@ -555,14 +558,7 @@ export const HelpDialogEn: React.FC = () => {
       inspired={
         <Explanation>
           <PokerHandle>Poker Handle</PokerHandle> has been heavily inspired by{" "}
-          <Link
-            href="https://www.nytimes.com/games/wordle/index.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Wordle
-          </Link>
-          .
+          <Wordle /> and <Worldle />.
         </Explanation>
       }
     />
@@ -642,14 +638,7 @@ export const HelpDialogJa: React.FC = () => {
       }
       inspired={
         <Explanation>
-          <PokerHandle>Poker Handle</PokerHandle>は
-          <Link
-            href="https://www.nytimes.com/games/wordle/index.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Wordle
-          </Link>
+          <PokerHandle>Poker Handle</PokerHandle>は<Wordle />と<Worldle />
           をすごく参考にしています。
         </Explanation>
       }
