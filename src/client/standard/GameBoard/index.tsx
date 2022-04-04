@@ -160,9 +160,7 @@ export const GameBoard: React.FC<Props> = ({
     setGuesses(next);
     save(next);
 
-    setTmpDiff((prev) =>
-      collectDiff(prev, answers, [...board.player, ...allHands])
-    );
+    setTmpDiff((prev) => collectDiff(prev, answers, board.common, allHands));
 
     setTrials(count + 1);
     setColumn(0);

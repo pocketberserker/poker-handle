@@ -5,7 +5,8 @@ import {
   matchTheAnswers,
   collectDiff,
 } from "../../src/client/guess";
-import { Card, parse } from "../../src/poker";
+import { Card, equalsCard, parse, ranks, suits } from "../../src/poker";
+import { generate } from "../../src/client/generator";
 
 describe("Answers", () => {
   test.each([
@@ -512,7 +513,8 @@ describe("Diff", () => {
           common.split(" ").map((c) => parse(c)),
           () => ""
         ) as Answers,
-        [].map((c) => parse(c))
+        [],
+        []
       )
     ).toEqual(expected);
   });
@@ -533,6 +535,7 @@ describe("Diff", () => {
           "2C 3C 4C 5C 7C".split(" ").map((c) => parse(c)),
           () => ""
         ) as Answers,
+        [],
         ["8C", "9C"].map((c) => parse(c))
       )
     ).toEqual({
@@ -591,5 +594,62 @@ describe("Diff", () => {
       partials: [],
       partialRanks: [],
     });
+  });
+
+  it(`fix bug: selectable card is nothing(seed: "2022-03-30")`, () => {
+    const inputs: Guess[][] = [
+      "AC 2D 3C 4C 7C",
+      "AH TD TH 2D TS",
+      "9S JS QS KS KH",
+      "AH AS 2S KH 2D",
+      "6S 6D 8D 5H 8h",
+    ].map((s) =>
+      s.split(" ").map((c) => ({ kind: "entered", card: parse(c) }))
+    );
+    const board = generate("2022-03-30", 3);
+    const hands = [...board.player, ...board.opponents.flat()];
+
+    let diff: Diff = {
+      absents: [...hands],
+      corrects: [],
+      partialRanks: [],
+      partials: [],
+    };
+    for (const input of inputs) {
+      diff = collectDiff(
+        diff,
+        matchTheAnswers(input, board.common, () => "") as Answers,
+        board.common,
+        hands
+      );
+    }
+
+    const all = ranks
+      .map((r) =>
+        suits.map(
+          (s) =>
+            ({
+              rank: r,
+              suit: s,
+            } as Card)
+        )
+      )
+      .flat();
+    const remaining: Card[] = [];
+
+    for (const card of all) {
+      if (
+        diff.absents.findIndex((a) => equalsCard(a, card)) === -1 &&
+        diff.partials.findIndex((p) => equalsCard(p, card)) === -1 &&
+        diff.partialRanks.findIndex((p) => equalsCard(p, card)) === -1
+      ) {
+        remaining.push(card);
+      }
+    }
+    expect(
+      board.common
+        .filter((c) => board.player.findIndex((h) => equalsCard(c, h)) !== -1)
+        .every((e) => remaining.findIndex((c) => equalsCard(e, c)) !== -1)
+    ).toBeTruthy();
   });
 });

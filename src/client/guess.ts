@@ -125,6 +125,7 @@ export type Diff = {
 export const collectDiff = (
   prev: Diff,
   current: Answers,
+  common: Card[],
   hands: Card[]
 ): Diff => {
   const corrects = [
@@ -143,7 +144,7 @@ export const collectDiff = (
   const absents: Card[] = [];
   for (const card of [
     ...prev.absents.filter(
-      (a) => hands.findIndex((h) => equalsCard(h, a)) === -1
+      (a) => [...common, ...hands].findIndex((h) => equalsCard(h, a)) === -1
     ),
     ...current.absents,
   ]) {
@@ -158,7 +159,9 @@ export const collectDiff = (
             equalsCard(c, card) === false &&
             corrects.findIndex((o) => equalsCard(o, c)) === -1 &&
             partials.findIndex((p) => equalsCard(p, c)) === -1 &&
-            current.partialRanks.findIndex((p) => equalsCard(p, c)) === -1
+            current.partialRanks.findIndex((p) => equalsCard(p, c)) === -1 &&
+            common.findIndex((p) => equalsCard(p, c)) === -1 &&
+            hands.findIndex((p) => equalsCard(p, c)) === -1
         )
     );
   }
