@@ -8,14 +8,6 @@ import { Button } from "../../atoms/Button";
 import { ShareButton } from "../ShareButton";
 import { Guess } from "../../guess";
 
-// const Statistics: React.FC = () => {
-//   return <div></div>;
-// };
-
-// const Distribution: React.FC = () => {
-//   return <div></div>;
-// };
-
 type CountdownNextPokerProps = {
   play: () => void;
 };
