@@ -200,6 +200,7 @@ export const GameBoard: React.FC<Props> = ({
 
   return (
     <GameBoardLayout
+      hashtag="#Poker_Handle"
       board={
         <>
           <HandsArea

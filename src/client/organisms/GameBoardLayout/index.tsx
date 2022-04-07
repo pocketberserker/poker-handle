@@ -12,6 +12,7 @@ import { maxTrials } from "../../constants/meta";
 
 type Props = {
   board: React.ReactNode;
+  hashtag: string;
   guesses: Guess[][];
   diff: Diff;
   trials: number;
@@ -28,6 +29,7 @@ type Props = {
 
 export const GameBoardLayout: React.FC<Props> = ({
   board,
+  hashtag,
   guesses,
   diff,
   trials,
@@ -75,6 +77,7 @@ export const GameBoardLayout: React.FC<Props> = ({
           handleBackspace={handleBackspace}
         />
         <ResultDialog
+          hashtag={hashtag}
           guesses={guesses}
           open={openResultDialog}
           close={handleCloseResultDialog}
@@ -94,6 +97,7 @@ export const GameBoardLayout: React.FC<Props> = ({
         handleBackspace={handleBackspace}
       />
       <ResultDialog
+        hashtag={hashtag}
         guesses={guesses}
         open={openResultDialog}
         close={handleCloseResultDialog}

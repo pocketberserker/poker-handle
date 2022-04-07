@@ -63,6 +63,7 @@ const StyledCountdown = styled(Countdown)`
 `;
 
 type ResultDialogProps = {
+  hashtag: string;
   guesses: Guess[][];
   open: boolean;
   play: () => void;
@@ -70,6 +71,7 @@ type ResultDialogProps = {
 };
 
 export const ResultDialog: React.FC<ResultDialogProps> = ({
+  hashtag,
   guesses,
   open,
   play,
@@ -84,7 +86,7 @@ export const ResultDialog: React.FC<ResultDialogProps> = ({
             close();
           }}
         />
-        <StyledShareButton guesses={guesses} hashtag="#Poker_Handle" />
+        <StyledShareButton guesses={guesses} hashtag={hashtag} />
       </ResultDialogContainer>
     </Dialog>
   );
