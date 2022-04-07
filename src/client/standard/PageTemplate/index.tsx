@@ -1,7 +1,7 @@
 import React from "react";
 import { TemplateLayout as Layout } from "../../organisms/TemplateLayout";
 import { Guess } from "../../guess";
-import { GameBoard } from "../../organisms/GameBoard";
+import { GameBoard } from "../GameBoard";
 import { Board } from "../../generator";
 
 type Props = {
@@ -13,7 +13,7 @@ type Props = {
   save: (guesses: Guess[][]) => void;
 };
 
-export const HomeTemplate: React.FC<Props> = ({
+export const StandardTemplate: React.FC<Props> = ({
   board,
   init,
   alreadyAnswered,

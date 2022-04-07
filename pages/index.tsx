@@ -12,7 +12,7 @@ import {
 } from "../src/client/guess";
 import { useSettings } from "../src/client/hooks/Settings";
 import { ThemeContext } from "../src/client/hooks/Theme";
-import { HomeTemplate } from "../src/client/templates/HomeTemplate";
+import { StandardTemplate } from "../src/client/standard/PageTemplate";
 
 const genGuesses = (): Guess[][] =>
   Array(maxTrials).fill(Array(5).fill({ kind: "blank" }));
@@ -78,7 +78,7 @@ const Home: NextPage = () => {
   }
 
   return (
-    <HomeTemplate
+    <StandardTemplate
       board={board}
       init={guesses}
       alreadyAnswered={alreadyAnswered(guesses)}
