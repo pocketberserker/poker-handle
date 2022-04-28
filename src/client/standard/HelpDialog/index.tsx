@@ -405,6 +405,11 @@ export const HelpDialog: React.FC<HelpDialogProps> = ({
             <ExternalLink href="https://twitter.com/pocketberserker">
               @pocketberserker
             </ExternalLink>
+            {" ( "}
+            <ExternalLink href="https://github.com/pocketberserker/poker-handle">
+              source code
+            </ExternalLink>
+            {" ) "}
           </Explanation>
         </Section>
       </Dialog>
