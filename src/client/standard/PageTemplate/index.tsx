@@ -1,6 +1,7 @@
 import React from "react";
 import { TemplateLayout as Layout } from "../../organisms/TemplateLayout";
 import { Guess } from "../../guess";
+import { AppBar } from "../AppBar";
 import { GameBoard } from "../GameBoard";
 import { Board } from "../../generator";
 
@@ -22,7 +23,7 @@ export const StandardTemplate: React.FC<Props> = ({
   save,
 }) => {
   return (
-    <Layout>
+    <Layout AppBar={<AppBar />}>
       <GameBoard
         board={board}
         init={init}

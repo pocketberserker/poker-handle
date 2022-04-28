@@ -1,17 +1,16 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { AppBar } from "../AppBar";
 import { Footer } from "../Footer";
-import { appName } from "../../constants/meta";
 
 type Props = {
   children: React.ReactNode;
+  AppBar: React.ReactNode;
 };
 
-export const TemplateLayout: React.FC<Props> = ({ children }) => {
+export const TemplateLayout: React.FC<Props> = ({ children, AppBar }) => {
   return (
     <Wrapper>
-      <AppBar appName={appName} />
+      {AppBar}
       <Container>{children}</Container>
       <Footer />
     </Wrapper>
